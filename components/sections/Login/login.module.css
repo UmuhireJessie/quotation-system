@@ -1,0 +1,118 @@
+.loginCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: 10em;
+  margin-right: 10em;
+  margin-top: 2.5em;
+  max-height: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.loginCardLeft {
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(270deg, #60b848 1.64%, #009677 98.36%);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  height: 100%;
+  padding: 2em;
+}
+.loginCardLeft .img {
+  max-width: 100%;
+  background-color: transparent;
+  margin-top: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.loginCardLeft h2 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  background-color: transparent;
+}
+.loginCardLeft h2:last-child {
+  margin-bottom: 3rem;
+}
+
+.loginCardRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: transparent;
+  padding: 2em;
+}
+
+.loginCardRight h3 {
+  color: #50b848;
+  font-size: 25px;
+  font-weight: 700;
+  text-align: center;
+  background-color: transparent;
+  padding-bottom: 1.5em;
+}
+.loginCardRChild {
+  background-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.loginCardLeft .img {
+  width: 400px;
+  height: 200px;
+  margin: 10px 10px 0 0;
+}
+.form {
+  background: transparent;
+}
+.formField {
+  margin-bottom: 20px;
+  background: transparent;
+}
+
+.formField input {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #f5f5f5;
+  background: #f5f5f5;
+  width: 500px;
+}
+.formField input:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+.form p {
+  margin-top: 18px;
+  background: transparent;
+  font-size: 12px;
+}
+
+.form a {
+  color: #60b848;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+.resetpass {
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.buttonSubmit[type="submit"] {
+  background: linear-gradient(270deg, #60b848 1.64%, #009677 98.36%);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  width: 200px;
+}
