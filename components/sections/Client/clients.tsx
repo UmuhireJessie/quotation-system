@@ -8,6 +8,8 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const Clients = () => {
@@ -29,13 +31,14 @@ const Clients = () => {
     const [updatePNnumber, setUpdatePNnumber] = useState("")
     const [activeData, setActiveData] = useState<any | undefined>({});
     const [updateClientId, setUpdateClientId] = useState("");
+    const [isCreated, setIsCreated] = useState(false)
 
 
     const token = Cookies.get("token");
 
     const getAllClients = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/client/", {
+            const dt = await fetch("http://212.71.245.100:5000/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,7 +57,7 @@ const Clients = () => {
 
     useEffect(() => {
         getAllClients()
-    }, [])
+    }, [isCreated])
 
     const [filters, setFilters] = useState({
         dateStart: '',
@@ -113,7 +116,7 @@ const Clients = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/client/registration", {
+            const dt = await fetch("http://212.71.245.100:5000/client/registration", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -123,9 +126,28 @@ const Clients = () => {
             });
 
             const response = await dt.json();
-            console.log("response update", response)
-        } catch (error) {
+            console.log("response", response)
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setEmail("")
+                setPNumber("")
+                setFirstName("")
+                setLastName("")
+                setIsCreated(true)
+                toast.success('Client added successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
+        } catch (error: any) {
             console.error(error);
+            setEmail("")
+            setPNumber("")
+            setFirstName("")
+            setLastName("")
+            toast.error(error.message)
         }
     };
 
@@ -161,7 +183,7 @@ const Clients = () => {
 
     const updateClient = async (data: any, id) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -172,8 +194,25 @@ const Clients = () => {
 
             const response = await dt.json();
             console.log("response", response)
-        } catch (error) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setIsCreated(true)
+                toast.success('Client updated successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
+
+        } catch (error: any) {
             console.error(error);
+            setUpdateFirstName("");
+            setUpdateLastName("");
+            setUpdatePNnumber("");
+            setUpdateEmail("");
+            setUpdateClientId("");
+            toast.error(error.message)
         }
     };
 
@@ -201,6 +240,13 @@ const Clients = () => {
     return (
         <>
             <Adminbar />
+            <ToastContainer
+                autoClose={2000}
+                hideProgressBar={true}
+                closeOnClick
+                pauseOnHover
+                style={{ width: "300px", height: "100px" }}
+            />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Clients</h4>
@@ -355,14 +401,14 @@ const Clients = () => {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
+                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
                             onSubmit={createNewClient}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
-                                Create new client
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
+                                New Client
                             </h1>
                             <IoIcons.IoClose
                                 className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
@@ -374,11 +420,12 @@ const Clients = () => {
                                     type="text"
                                     name="firstName"
                                     placeholder="First Name"
+                                    required
                                     value={firstName}
                                     onChange={(e) => {
                                         setFirstName(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
@@ -386,41 +433,44 @@ const Clients = () => {
                                     type="text"
                                     name="lastName"
                                     placeholder="Last Name"
+                                    required
                                     value={lastName}
                                     onChange={(e) => {
                                         setLastName(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
-                                    type="text"
+                                    type="email"
                                     name="email"
                                     placeholder="Email"
+                                    required
                                     value={email}
                                     onChange={(e) => {
                                         setEmail(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
-                                    type="text"
+                                    type="number"
                                     name="pNumber"
                                     placeholder="Phone Number"
+                                    required
                                     value={pNumber}
                                     onChange={(e) => {
                                         setPNumber(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
-
                             <button
                                 type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                             >
                                 Save
                             </button>
@@ -433,74 +483,79 @@ const Clients = () => {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
+                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
                             onSubmit={updateCycle}
-                            className="relative rounded-[5px] w-[100%] h-[500px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
-                                Update client
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
+                                Update Client
                             </h1>
                             <IoIcons.IoClose
-                                style={{
-                                    position: "absolute",
-                                    top: "20px",
-                                    right: "20px",
-                                    fontSize: "35px",
-                                    cursor: "pointer",
-                                }}
+                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                                 onClick={handleCloseUpdateModal}
                             />
-                            <hr style={{ marginBottom: "40px" }} />
-                            <input
-                                type="text"
-                                name="firstName"
-                                placeholder="First Name"
-                                value={updateFirstName}
-                                onChange={(e) => {
-                                    setUpdateFirstName(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                            />
-                            <input
-                                type="text"
-                                name="lastName"
-                                placeholder="Last Name"
-                                value={updateLastName}
-                                onChange={(e) => {
-                                    setUpdateLastName(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                            />
-                            <input
-                                type="text"
-                                name="email"
-                                placeholder="Email"
-                                value={updateEmail}
-                                onChange={(e) => {
-                                    setUpdateEmail(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                            />
-                            <input
-                                type="text"
-                                name="pNnumber"
-                                placeholder="Phone Number"
-                                value={updatePNnumber}
-                                onChange={(e) => {
-                                    setUpdatePNnumber(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                            />
-                            <div className="flex flex-wrap w-[300px] m-auto">
-                                <button
-                                    className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                                    type="submit"
-                                >
-                                    Save
-                                </button>
+                            <hr style={{ marginBottom: "4px" }} />
+                            <div>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                    required
+                                    value={updateFirstName}
+                                    onChange={(e) => {
+                                        setUpdateFirstName(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
                             </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                    required
+                                    value={updateLastName}
+                                    onChange={(e) => {
+                                        setUpdateLastName(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    required
+                                    value={updateEmail}
+                                    onChange={(e) => {
+                                        setUpdateEmail(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    name="pNumber"
+                                    placeholder="Phone Number"
+                                    required
+                                    value={updatePNnumber}
+                                    onChange={(e) => {
+                                        setUpdatePNnumber(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
+                            >
+                                Save
+                            </button>
                         </form>
                     </Box>
                 </Modal>

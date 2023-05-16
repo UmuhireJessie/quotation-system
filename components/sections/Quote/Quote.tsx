@@ -11,6 +11,7 @@ import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AnyMxRecord } from "dns";
 
 const customTheme = (theme: any) => {
     return {
@@ -56,13 +57,14 @@ const Quote = () => {
     const [activeData, setActiveData] = useState<any | undefined>({});
     const [updateQuoteId, setUpdateQuoteId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [isCreated, setIsCreated] = useState(false)
 
 
     const token = Cookies.get("token");
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/quatation/", {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,7 +74,7 @@ const Quote = () => {
 
             const response = await dt.json();
             setData(response?.data)
-            console.log("response quote", response)
+            console.log("First response quote", response)
             return response;
         } catch (error) {
             console.error(error);
@@ -82,7 +84,7 @@ const Quote = () => {
     useEffect(() => {
         getAllQuotes()
         getAllClients()
-    }, [])
+    }, [isCreated])
 
     const [filters, setFilters] = useState({
         dateStart: '',
@@ -125,8 +127,8 @@ const Quote = () => {
             .toLowerCase()
             .includes(filters.validDate.toLowerCase());
 
-        const documentMatch = row.document?.toLowerCase()
-            .includes(filters.document.toLowerCase());
+        // const documentMatch = row.document?.toLowerCase()
+        //     .includes(filters.document.toLowerCase());
 
         const policyQuoteIdMatch = row.policyQuoteId
             .toLowerCase()
@@ -140,8 +142,8 @@ const Quote = () => {
             .toLowerCase()
             .includes(filters.status.toLowerCase());
 
-        const clientIdMatch = row.clientId?.toLowerCase()
-            .includes(filters.clientId.toLowerCase());
+        // const clientIdMatch = row.clientId?.toLowerCase()
+        //     .includes(filters.clientId?.toLowerCase());
 
         return (
             isDateInRange &&
@@ -151,13 +153,13 @@ const Quote = () => {
             validDateMatch &&
             policyQuoteIdMatch &&
             policyHolderNameMatch &&
-            statusMatch &&
-            clientIdMatch &&
-            documentMatch
+            statusMatch
+            // documentMatch
+            // clientIdMatch
+
         );
     });
 
-    console.log("filteredData quote", filteredData)
 
     // Create client ===============
 
@@ -169,7 +171,7 @@ const Quote = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/quatation/", {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -180,8 +182,31 @@ const Quote = () => {
 
             const response = await dt.json();
             console.log("response create quote", response)
-        } catch (error) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setPolicyQuoteType("")
+                setPolicyQuoteId("")
+                setPolicyHolderType("")
+                setPolicyHolderName("")
+                setAmount("")
+                setValidDate("")
+                setIsCreated(true)
+                toast.success('Quotation added successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
+        } catch (error:any) {
             console.error(error);
+            setPolicyQuoteType("")
+            setPolicyQuoteId("")
+            setPolicyHolderType("")
+            setPolicyHolderName("")
+            setAmount("")
+            setValidDate("")
+            toast.error(error.message)
         }
     };
 
@@ -203,7 +228,7 @@ const Quote = () => {
     // Assigning client ==========
     const getOneClient = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -222,7 +247,7 @@ const Quote = () => {
     }
     const getAllClients = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/client/", {
+            const dt = await fetch("http://212.71.245.100:5000/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -238,7 +263,7 @@ const Quote = () => {
             console.error(error);
         }
     }
-    console.log("clientData", clientData)
+
     const clientOptions = clientData?.map((client: any, index: any) => {
         return {
             key: index,
@@ -259,7 +284,7 @@ const Quote = () => {
 
     const assignClient = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/quatation/asign/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/quatation/asign/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -267,10 +292,19 @@ const Quote = () => {
                     "Authorization": `Bearer ${token}`
                 },
             });
-            console.log("response assign data", data)
-            console.log("response assign id", id)
+            
             const response = await dt.json();
-            console.log("response assign", response)
+            
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setIsCreated(true)
+                toast.success('Client assigned successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
 
         } catch (error) {
             console.error(error);
@@ -314,7 +348,7 @@ const Quote = () => {
     };
     const uploadFile = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/upload?quoteId=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/upload?quoteId=${id}`, {
                 method: "POST",
                 body: data,
                 headers: {
@@ -330,7 +364,7 @@ const Quote = () => {
                 toast.error(response?.detail)
             }
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message)
         }
@@ -339,7 +373,7 @@ const Quote = () => {
     // Download kyc
     const downloadFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/download?quoteId=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -354,7 +388,7 @@ const Quote = () => {
                 toast.error(response?.detail)
             }
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message)
         }
@@ -362,7 +396,7 @@ const Quote = () => {
     // delete kyc
     const deleteFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/?filename=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/?filename=${id}`, {
                 method: "DELETE",
                 headers: {
                     'Accept': 'application/json',
@@ -377,7 +411,7 @@ const Quote = () => {
                 toast.error(response?.detail)
             }
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message)
         }
@@ -404,7 +438,7 @@ const Quote = () => {
 
     const updateClient = async (data: any, id) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/quatation/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/quatation/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -415,8 +449,27 @@ const Quote = () => {
 
             const response = await dt.json();
             console.log("response", response)
-        } catch (error) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setIsCreated(true)
+                toast.success('Quotation updated successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
+
+        } catch (error:any) {
             console.error(error);
+            setUpdatePolicyQuoteType('')
+            setUpdatePolicyHolderType('')
+            setUpdatePolicyHolderName('')
+            setUpdateDoc('')
+            setUpdateValidDate('')
+            setUpdateAmount('')
+            setUpdateQuoteId('');
+            toast.error(error.message)
         }
     };
 
@@ -786,7 +839,8 @@ const Quote = () => {
 
                             <button
                                 type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                             >
                                 Save
                             </button>
@@ -872,7 +926,8 @@ const Quote = () => {
 
                             <div className="flex flex-wrap w-[300px] m-auto">
                                 <button
-                                    className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                    className="text-white border-[1px] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                    style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                                     type="submit"
                                 >
                                     Save
@@ -917,7 +972,8 @@ const Quote = () => {
 
                             <div className="flex flex-wrap w-[300px] mx-auto mt-[20px]">
                                 <button
-                                    className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                    className="text-white border-[1px] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                    style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                                     type="submit"
                                 >
                                     Save

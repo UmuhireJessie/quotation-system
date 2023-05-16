@@ -29,7 +29,7 @@ const Payment = () => {
 
     const getAllPayment = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/payment/", {
+            const dt = await fetch("http://212.71.245.100:5000/payment/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const Payment = () => {
     };
     const createMakePayment = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/payment/make/?policyQuoteId=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/payment/make/?policyQuoteId=${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const Payment = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/payment/pay/", {
+            const dt = await fetch("http://212.71.245.100:5000/payment/pay/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
