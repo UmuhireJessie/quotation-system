@@ -4,11 +4,14 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
+import * as IoIcons from "react-icons/io5";
 import { Pagination } from '@nextui-org/react';
 import handleExportData from "@/components/utils/ExportExcel";
 import { useRef } from 'react';
 import { exportToPDF } from "@/components/utils/ExportPDF";
 import { printTable } from "@/components/utils/Print";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 
 const PaymentReport = () => {
@@ -17,6 +20,18 @@ const PaymentReport = () => {
     const [loading, setLoading] = useState(true);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const tableRef = useRef(null);
+    const [reportEmail, setReportEmail] = useState("")
+    const [openSendEmailModal, setOpenSendEmailModal] = useState(false)
+
+    const handleCloseSendEmailModal = () => {
+        setOpenSendEmailModal(false);
+    }
+    const handleOpenSendEmailModal = () => {
+        setOpenSendEmailModal(true);
+    }
+    const handleSendEmailReport = () => {
+        return;
+    }
 
     const token = Cookies.get("token");
 
@@ -160,7 +175,7 @@ const PaymentReport = () => {
                     </button>
                     <button
                         className={" h-[35px] rounded-r-[5px] text-white flex items-center bg-[#8c70db] pr-[10px] pl-[5px] mb-[20px] mr-[10px]"}
-                        onClick={() => ""}
+                        onClick={handleOpenSendEmailModal}
                     >
                     <BsIcons.BsEnvelopeOpen className="mx-[5px]" />
                         <span className="text-sm">Send By Email</span>
@@ -271,6 +286,57 @@ const PaymentReport = () => {
                         }
                     </Tbody>
                 </Table>
+
+                <Modal
+                    open={openSendEmailModal}
+                    onClose={handleCloseSendEmailModal}
+                    aria-labelledby="parent-modal-title"
+                    aria-describedby="parent-modal-description"
+                >
+                    <Box className="flex m-auto w-[35%] h-[100%] items-center justify-center">
+                        <form
+                            action=""
+                            onSubmit={handleSendEmailReport}
+                            className="relative rounded-[5px] w-[100%] m-auto p-[10px] dark:bg-dark-bg bg-[#f0f0f0] "
+                        >
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
+                                Send Report to Email
+                            </h1>
+                            <IoIcons.IoClose
+                                style={{
+                                    position: "absolute",
+                                    top: "20px",
+                                    right: "20px",
+                                    fontSize: "35px",
+                                    cursor: "pointer",
+                                }}
+                                onClick={handleCloseSendEmailModal}
+                            />
+                            <hr style={{ marginBottom: "40px" }} />
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                placeholder="Please enter your email"
+                                value={reportEmail}
+                                onChange={(e) => {
+                                    setReportEmail(e.target.value);
+                                }}
+                                className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                            />
+
+                            <div className="flex flex-wrap w-[300px] mx-auto mt-[20px]">
+                                <button
+                                    className="text-white border-[1px] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                    style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
+                                    type="submit"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </Box>
+                </Modal>
 
                 <Pagination
                     size="sm"

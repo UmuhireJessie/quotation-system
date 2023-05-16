@@ -28,6 +28,7 @@ export const convertToExportFormatClient = (dataToFormat) => {
     });
     return formattedData;
 };
+
 export const convertToExportFormatPay = (dataToFormat) => {
     const formattedData = dataToFormat.map((row: any) => {
         return {
@@ -41,6 +42,7 @@ export const convertToExportFormatPay = (dataToFormat) => {
     });
     return formattedData;
 };
+
 export const convertToExportFormatSMS = (dataToFormat) => {
     const formattedData = dataToFormat.map((row: any) => {
         return {
