@@ -6,6 +6,9 @@ import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 import handleExportData from "@/components/utils/ExportExcel";
+import { useRef } from 'react';
+import { exportToPDF } from "@/components/utils/ExportPDF";
+import { printTable } from "@/components/utils/Print";
 
 
 const SMSReport = () => {
@@ -13,6 +16,7 @@ const SMSReport = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const tableRef = useRef(null);
 
 
     const token = Cookies.get("token");
@@ -131,14 +135,14 @@ const SMSReport = () => {
                 <div className='flex justify-end'>
                     <button
                         className={" h-[35px] rounded-l-[5px] text-[#1b173f] flex items-center bg-[#cac8c8] pr-[10px] pl-[5px] mb-[20px]"}
-                        onClick={() => ""}
+                        onClick={() => printTable(tableRef)}
                     >
                     <BsIcons.BsPrinterFill className="mx-[5px]" />
                         <span className="text-sm">Print</span>
                     </button>
                     <button
                         className={" h-[35px] text-white flex items-center bg-[#dd5959] pr-[10px] pl-[5px] mb-[20px]"}
-                        onClick={() => ""}
+                        onClick={() => exportToPDF(tableRef)}
                     >
                     <BsIcons.BsFilePdfFill className="mx-[5px]" />
                         <span className="text-sm">PDF</span>
@@ -147,7 +151,7 @@ const SMSReport = () => {
                         className={" h-[35px] text-white flex items-center bg-[#48b857] pr-[10px] pl-[5px] mb-[20px]"}
                         onClick={(e) => {
                             e.preventDefault();
-                            handleExportData(currentRows, 'sms')
+                            handleExportData(filteredData, 'sms')
                         }}
                     >
                     <BsIcons.BsFileExcelFill className="mx-[5px]" />
@@ -162,7 +166,7 @@ const SMSReport = () => {
                     </button>
                 </div>
 
-                <Table className="mb-10 text-[#06091b]">
+                <Table ref={tableRef} className="mb-10 text-[#06091b]">
                     <Thead className="">
                         <Tr>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0] pl-4">Creation Date</Th>
