@@ -8,6 +8,8 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const SMS = () => {
@@ -20,6 +22,7 @@ const SMS = () => {
     const [msgRef, setMsgRef] = useState("");
     const [senderId, setSenderId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [isCreated, setIsCreated] = useState(false)
 
 
     const token = Cookies.get("token");
@@ -38,8 +41,11 @@ const SMS = () => {
             setData(response.data)
             console.log("response", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     }
 
@@ -122,8 +128,29 @@ const SMS = () => {
 
             const response = await dt.json();
             console.log("send sms", response)
-        } catch (error) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setMsisdn("")
+                setMessage("")
+                setMsgRef("")
+                setSenderId("")
+                setIsCreated(true)
+                toast.success('SMS sent successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            }
+        } catch (error:any) {
             console.error(error);
+            setMsisdn("")
+            setMessage("")
+            setMsgRef("")
+            setSenderId("")
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     };
 
@@ -149,6 +176,13 @@ const SMS = () => {
     return (
         <>
             <Adminbar />
+            <ToastContainer
+                autoClose={2000}
+                hideProgressBar={true}
+                closeOnClick
+                pauseOnHover
+                style={{ width: "300px", height: "100px" }}
+            />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">SMS</h4>

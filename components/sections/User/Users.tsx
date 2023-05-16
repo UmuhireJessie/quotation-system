@@ -128,8 +128,11 @@ const Users = () => {
             setData(response?.data)
             console.log("response", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     }
 
@@ -179,7 +182,9 @@ const Users = () => {
             setPassword("")
             setLastName("")
             setRole("")
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 

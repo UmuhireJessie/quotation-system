@@ -147,7 +147,9 @@ const Clients = () => {
             setPNumber("")
             setFirstName("")
             setLastName("")
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     };
 

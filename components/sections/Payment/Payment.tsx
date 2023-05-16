@@ -8,6 +8,8 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const Payment = () => {
@@ -41,8 +43,11 @@ const Payment = () => {
             setData(response.data)
             console.log("response", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     }
 
@@ -104,10 +109,6 @@ const Payment = () => {
         );
     });
 
-    console.log("filteredData", filteredData)
-
-    const numData = filteredData?.length
-
     // Make Payment
     const handleOpenMakeClient = () => {
         setOpenMakeModal(true);
@@ -128,8 +129,14 @@ const Payment = () => {
 
             const response = await dt.json();
             console.log("Pay", response)
-        } catch (error) {
+            toast.success('Payment created successfully!', {
+                className: 'font-[sans-serif] text-sm'
+            })
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 
@@ -153,8 +160,14 @@ const Payment = () => {
 
             const response = await dt.json();
             console.log("Pay", response)
-        } catch (error) {
+            toast.success('Payment sent successfully!', {
+                className: 'font-[sans-serif] text-sm'
+            })
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 
@@ -180,6 +193,13 @@ const Payment = () => {
     return (
         <>
             <Adminbar />
+            <ToastContainer
+                autoClose={2000}
+                hideProgressBar={true}
+                closeOnClick
+                pauseOnHover
+                style={{ width: "300px", height: "100px" }}
+            />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Payment</h4>

@@ -11,7 +11,6 @@ import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AnyMxRecord } from "dns";
 
 const customTheme = (theme: any) => {
     return {
@@ -76,8 +75,11 @@ const Quote = () => {
             setData(response?.data)
             console.log("First response quote", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     }
 
@@ -198,7 +200,7 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             setPolicyQuoteType("")
             setPolicyQuoteId("")
@@ -206,7 +208,9 @@ const Quote = () => {
             setPolicyHolderName("")
             setAmount("")
             setValidDate("")
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 
@@ -259,8 +263,11 @@ const Quote = () => {
             setClientData(response?.data)
             console.log("response", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     }
 
@@ -292,9 +299,9 @@ const Quote = () => {
                     "Authorization": `Bearer ${token}`
                 },
             });
-            
+
             const response = await dt.json();
-            
+
             if (response?.detail) {
                 toast.error(response.detail, {
                     className: 'font-[sans-serif] text-sm'
@@ -306,8 +313,11 @@ const Quote = () => {
                 });
             }
 
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     };
 
@@ -359,14 +369,20 @@ const Quote = () => {
             const response = await dt.json();
             console.log("response", response)
             if (response.status == "success") {
-                toast.success("KYC added successfully!")
+                toast.success("KYC added successfully!", {
+                    className: 'font-[sans-serif] text-sm'
+                })
             } else {
-                toast.error(response?.detail)
+                toast.error(response?.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                })
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 
@@ -383,14 +399,20 @@ const Quote = () => {
             const response = await dt.json();
             console.log("response download", response)
             if (response.status == "success") {
-                toast.success("KYC added successfully!")
+                toast.success("KYC added successfully!", {
+                    className: 'font-[sans-serif] text-sm'
+                })
             } else {
-                toast.error(response?.detail)
+                toast.error(response?.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                })
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
     // delete kyc
@@ -406,14 +428,20 @@ const Quote = () => {
             const response = await dt.json();
             console.log("response delete", response)
             if (response.status == "success") {
-                toast.success("KYC deleted successfully!")
+                toast.success("KYC deleted successfully!", {
+                    className: 'font-[sans-serif] text-sm'
+                })
             } else {
-                toast.error(response?.detail)
+                toast.error(response?.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                })
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     };
 
@@ -460,7 +488,7 @@ const Quote = () => {
                 });
             }
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             setUpdatePolicyQuoteType('')
             setUpdatePolicyHolderType('')
@@ -469,7 +497,9 @@ const Quote = () => {
             setUpdateValidDate('')
             setUpdateAmount('')
             setUpdateQuoteId('');
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     };
 
@@ -658,10 +688,10 @@ const Quote = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.status == 'pending' ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">pending</span> : row.status == 'asigned' ? <span className="bg-[#e6e1a6] rounded-[5px] px-[8px] py-[2px]">assigned</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">paid</span>}</Td>
                                             <Td className='py-[10px] border-b border-[#e6e6e6] text-sm'>
                                                 {
-                                                    row.status !== 'paid' ? (
+                                                    row.status === 'pending' ? (
                                                         <span className="inline-flex">
                                                             <button
-                                                                className={" h-[28px] mr-2   rounded-[5px] bg-[#5bcf5b] text-white flex items-center py-[5px] px-[7px]"}
+                                                                className={"h-[28px] mr-2 rounded-[5px] bg-[#5bcf5b] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={(e) => {
                                                                     setUpdateQuoteId(row.id)
                                                                     handleOpenAssignModal(e);
@@ -670,7 +700,7 @@ const Quote = () => {
                                                                 <span>assign</span>
                                                             </button>
                                                             <button
-                                                                className={" h-[28px] rounded-[5px] bg-[#5c83d8] text-white flex items-center py-[5px] px-[7px] mr-[8px]"}
+                                                                className={"h-[28px] rounded-[5px] bg-[#5c83d8] text-white flex items-center py-[5px] px-[7px] mr-[8px]"}
                                                                 onClick={(e) => {
                                                                     setActiveData(row)
                                                                     handleOpenUpdateModal(e);
@@ -678,12 +708,23 @@ const Quote = () => {
                                                             >
                                                                 <span>update</span>
                                                             </button>
-
+                                                        </span>
+                                                    ) : row.status === 'asigned' ? (
+                                                        <span className="inline-flex">
+                                                            <button
+                                                                className={"h-[28px] rounded-[5px] bg-[#5c83d8] text-white flex items-center py-[5px] px-[7px] mr-[8px]"}
+                                                                onClick={(e) => {
+                                                                    setActiveData(row)
+                                                                    handleOpenUpdateModal(e);
+                                                                }}
+                                                            >
+                                                                <span>update</span>
+                                                            </button>
                                                         </span>
                                                     ) : (
                                                         <span className="inline-block">
                                                             <button
-                                                                className={" h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] flex items-center py-[5px] px-[7px] mb-[4px]"}
+                                                                className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={(e) => {
                                                                     setActiveData(row)
                                                                     handleOpenUploadModal(e);
@@ -692,7 +733,7 @@ const Quote = () => {
                                                                 <span>upload</span>
                                                             </button>
                                                             <button
-                                                                className={" h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
+                                                                className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
                                                                     downloadFile(row.id)
                                                                 }}
@@ -700,7 +741,7 @@ const Quote = () => {
                                                                 <span>download</span>
                                                             </button>
                                                             <button
-                                                                className={" h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
+                                                                className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={() => {
                                                                     deleteFile(row.id)
                                                                 }}
