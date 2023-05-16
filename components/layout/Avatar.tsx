@@ -30,13 +30,11 @@ const AvatarWithDropdown = () => {
 
   return (
     <div className="relative flex items-center justify-center">
-      {/* <div className="m-2 text-[#686969] text-base">{role}</div> */}
       <button
         onClick={() => setShowDropdown(!showDropdown)}
         className="flex items-center justify-center w-8 h-8 rounded-[5px] border-[.5px] bg-[#e6e6e6] text-white font-semibold focus:outline-none"
       >
         <Image src={Avatar} alt="User Avatar" />
-        {/* {username.charAt(0).toUpperCase()} */}
       </button>
       {showDropdown && (
         <div className="absolute top-10 right-0 w-48 py-2 bg-white rounded-lg shadow-xl">

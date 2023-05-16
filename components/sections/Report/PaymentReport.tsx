@@ -1,74 +1,20 @@
 import Adminbar from "@/components/layout/AdminNav";
-import Footer from "@/components/layout/Footer";
-import { Icon } from "@iconify/react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import * as AiIcons from "react-icons/ai";
-import Select from "react-select";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 
-const customTheme = (theme: any) => {
-    return {
-        ...theme,
-        colors: {
-            ...theme.colors,
-            text: "light-gray",
-            primary25: "#E5E7EB",
-            primary: "#d6dfdf",
-            neutral0: "white",
-        },
-    };
-};
 
 const PaymentReport = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [enteredWord, setEnteredWord] = useState("");
-    const [enteredsubmitWord, setenteredsubmitWord] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-
-    const [openCreateModal, setOpenCreateModal] = useState(false);
-    const [msisdn, setMsisdn] = useState("");
-    const [amount, setAmount] = useState("");
-    const [gtwRef, setGtwRef] = useState("");
-
-    const [openMakeModal, setOpenMakeModal] = useState(false);
-    const [policyQuoteId, setPolicyQuoteId] = useState("")
-
-    const [openUpdateModal, setOpenUpdateModel] = useState(false);
-    const [updateFirstName, setUpdateFirstName] = useState("")
-    const [updateLastName, setUpdateLastName] = useState("")
-    const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
-    const [activeData, setActiveData] = useState<any | undefined>({});
-    const [updateClientId, setUpdateClientId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
 
     const token = Cookies.get("token");
-
-    const handleStartDateChange = (date) => {
-        setStartDate(date);
-        if (endDate < date) {
-            setEndDate(date);
-        }
-    };
-
-    const handleEndDateChange = (date) => {
-        setEndDate(date);
-        if (date < startDate) {
-            setStartDate(date);
-        }
-    };
 
     const getAllPayment = async () => {
         try {
@@ -148,118 +94,6 @@ const PaymentReport = () => {
     });
 
     console.log("filteredData", filteredData)
-
-    const numData = filteredData?.length
-
-    // Make Payment
-    const handleOpenMakeClient = () => {
-        setOpenMakeModal(true);
-    };
-
-    const handleCloseMakeModel = () => {
-        setOpenMakeModal(false);
-    };
-    const createMakePayment = async (id: any) => {
-        try {
-            const dt = await fetch(`http://178.79.172.122:5000/payment/make/?policyQuoteId=${id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            const response = await dt.json();
-            console.log("Pay", response)
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // Send Payment ===============
-
-    const handleOpenCreateClient = () => {
-        setOpenCreateModal(true);
-    };
-    const handleCloseCreateModel = () => {
-        setOpenCreateModal(false);
-    };
-    const createClient = async (data: any) => {
-        try {
-            const dt = await fetch("http://178.79.172.122:5000/payment/pay/", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const response = await dt.json();
-            console.log("Pay", response)
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const createNewClient = (e: any) => {
-        e.preventDefault()
-        const payData = {
-            msisdn: msisdn,
-            amount: amount,
-            gtwRef: gtwRef
-        }
-        createClient(payData);
-        setOpenCreateModal(false);
-
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
-    };
-
-    // update client ===========
-
-    const handleOpenUpdateModal = (e: any) => {
-        setOpenUpdateModel(true);
-        setUpdateFirstName(activeData?.fName);
-        setUpdateLastName(activeData?.sName);
-
-        setUpdateClientId(activeData?.id);
-    };
-
-    const handleCloseUpdateModal = (e: any) => {
-        e.preventDefault();
-        setOpenUpdateModel(false);
-    };
-
-    const updateClient = async (data: any, id) => {
-        try {
-            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
-                method: "PUT",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            const response = await dt.json();
-            console.log("response", response)
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const updateCycle = (e: any) => {
-        e.preventDefault();
-
-        const updateData = {
-            first_name: updateFirstName,
-            last_name: updateLastName,
-        };
-        updateClient(updateData, updateClientId);
-
-        setOpenUpdateModel(false);
-    };
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -440,119 +274,7 @@ const PaymentReport = () => {
                 />
 
                 <hr style={{ marginBottom: "1.5rem" }} />
-
-                <Modal
-                    open={openCreateModal}
-                    onClose={handleCloseCreateModel}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
-                        <form
-                            action=""
-                            onSubmit={createNewClient}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-                        >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
-                                Send Payment
-                            </h1>
-                            <IoIcons.IoClose
-                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-                                onClick={handleCloseCreateModel}
-                            />
-                            <hr style={{ marginBottom: "4px" }} />
-                            <div>
-                                <input
-                                    type="text"
-                                    name="msisdn"
-                                    placeholder="Phone Number"
-                                    value={msisdn}
-                                    onChange={(e) => {
-                                        setMsisdn(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="amount"
-                                    placeholder="Amount"
-                                    value={amount}
-                                    onChange={(e) => {
-                                        setAmount(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="gtwRef"
-                                    placeholder="Gateway Reference"
-                                    value={gtwRef}
-                                    onChange={(e) => {
-                                        setGtwRef(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                            >
-                                Save
-                            </button>
-                        </form>
-                    </Box>
-                </Modal>
-
-                <Modal
-                    open={openMakeModal}
-                    onClose={handleCloseMakeModel}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
-                        <form
-                            action=""
-                            onSubmit={createMakePayment}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-                        >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
-                                Make Payment
-                            </h1>
-                            <IoIcons.IoClose
-                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-                                onClick={handleCloseMakeModel}
-                            />
-                            <hr style={{ marginBottom: "4px" }} />
-                            <div>
-                                <input
-                                    type="text"
-                                    name="quoteId"
-                                    placeholder="Policy Quote Id"
-                                    value={policyQuoteId}
-                                    onChange={(e) => {
-                                        setPolicyQuoteId(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                            >
-                                Save
-                            </button>
-                        </form>
-                    </Box>
-                </Modal>
-
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };

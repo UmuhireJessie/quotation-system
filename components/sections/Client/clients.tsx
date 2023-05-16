@@ -1,34 +1,14 @@
 import Adminbar from "@/components/layout/AdminNav";
-import Footer from "@/components/layout/Footer";
-import { Icon } from "@iconify/react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import styles from "../User/users.module.css"
-import * as AiIcons from "react-icons/ai";
-import Select from "react-select";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-// import { Pagination } from 'react-bootstrap';
 
-const customTheme = (theme: any) => {
-    return {
-        ...theme,
-        colors: {
-            ...theme.colors,
-            text: "light-gray",
-            primary25: "#E5E7EB",
-            primary: "#d6dfdf",
-            neutral0: "white",
-        },
-    };
-};
 
 const Clients = () => {
 
@@ -71,8 +51,6 @@ const Clients = () => {
             console.error(error);
         }
     }
-
-    const numData = data?.length
 
     useEffect(() => {
         getAllClients()
@@ -162,9 +140,6 @@ const Clients = () => {
         createClient(regData);
         setOpenCreateModal(false);
 
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
     };
 
     // update client ===========
@@ -531,8 +506,6 @@ const Clients = () => {
                 </Modal>
 
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };

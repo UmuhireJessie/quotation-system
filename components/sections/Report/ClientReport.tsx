@@ -3,42 +3,16 @@ import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
-import Select from "react-select";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
 
-const customTheme = (theme: any) => {
-    return {
-        ...theme,
-        colors: {
-            ...theme.colors,
-            text: "light-gray",
-            primary25: "#E5E7EB",
-            primary: "#d6dfdf",
-            neutral0: "white",
-        },
-    };
-};
 
 const ClientReport = () => {
 
     const [data, setData] = useState<any>([]);
     const [isCreated, setIsCreated] = useState(false)
-
-    const [openCreateModal, setOpenCreateModal] = useState(false);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [pNumber, setPNumber] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
     const token = Cookies.get("token");
@@ -119,76 +93,6 @@ const ClientReport = () => {
             console.error(error);
         }
     }
-
-    // Create userr ===============
-
-    const handleOpenCreateUser = () => {
-        setOpenCreateModal(true);
-    };
-    const handleCloseCreateModel = () => {
-        setOpenCreateModal(false);
-    };
-    const createUser = async (data: any) => {
-        try {
-            const dt = await fetch("http://178.79.172.122:5000/auth/registration", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const response = await dt.json();
-            console.log("response", response)
-            if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
-            } else {
-                setEmail("")
-                setPNumber("")
-                setFirstName("")
-                setPassword("")
-                setLastName("")
-                setRole("")
-                setIsCreated(true)
-                toast.success('Member added successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
-            }
-
-
-        } catch (error: any) {
-            console.error(error);
-            setEmail("")
-            setPNumber("")
-            setFirstName("")
-            setPassword("")
-            setLastName("")
-            setRole("")
-            toast.error(error.message)
-        }
-    };
-
-    const createNewUser = (e: any) => {
-        e.preventDefault();
-        if (role == "") {
-            toast.error('Please select a role', {
-                className: 'font-[sans-serif] text-sm'
-            });
-            return
-        }
-        const regData = {
-            email: email,
-            pNnumber: pNumber,
-            first_name: firstName,
-            last_name: lastName,
-            password: password,
-            role: role
-        };
-        createUser(regData);
-        setOpenCreateModal(false);
-    };
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -392,116 +296,6 @@ const ClientReport = () => {
                     onChange={(page) => setCurrentPage(page)}
                 />
                 <hr style={{ marginBottom: "1.5rem" }} />
-
-
-                <Modal
-                    open={openCreateModal}
-                    onClose={handleCloseCreateModel}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
-                        <form
-                            action=""
-                            onSubmit={createNewUser}
-                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
-                        >
-                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
-                                New Staff
-                            </h1>
-                            <IoIcons.IoClose
-                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-                                onClick={handleCloseCreateModel}
-                            />
-                            <hr style={{ marginBottom: "4px" }} />
-                            <div>
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    placeholder="First Name"
-                                    required
-                                    value={firstName}
-                                    onChange={(e) => {
-                                        setFirstName(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    placeholder="Last Name"
-                                    required
-                                    value={lastName}
-                                    onChange={(e) => {
-                                        setLastName(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    required
-                                    value={email}
-                                    onChange={(e) => {
-                                        setEmail(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="number"
-                                    name="pNumber"
-                                    placeholder="Phone Number"
-                                    required
-                                    value={pNumber}
-                                    onChange={(e) => {
-                                        setPNumber(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    required
-                                    value={password}
-                                    onChange={(e) => {
-                                        setPassword(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
-                            </div>
-                            <div>
-                                <Select
-                                    className="px-[10px] h-[50px] my-[15px] mx-auto w-[89%] text-sm"
-                                    options={[
-                                        { value: "admin", label: "Admin" },
-                                        { value: "call_center", label: "Call Center" },
-                                    ]}
-                                    defaultValue={{ value: "", label: "Select Role" }}
-                                    onChange={(e) => setRole(`${e?.value}`)}
-                                    theme={customTheme}
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
-                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
-                            >
-                                Save
-                            </button>
-                        </form>
-                    </Box>
-                </Modal>
 
             </div>
 

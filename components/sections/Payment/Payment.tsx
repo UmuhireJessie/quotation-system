@@ -1,41 +1,19 @@
 import Adminbar from "@/components/layout/AdminNav";
-import Footer from "@/components/layout/Footer";
-import { Icon } from "@iconify/react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import * as AiIcons from "react-icons/ai";
-import Select from "react-select";
-// import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 
-const customTheme = (theme: any) => {
-    return {
-        ...theme,
-        colors: {
-            ...theme.colors,
-            text: "light-gray",
-            primary25: "#E5E7EB",
-            primary: "#d6dfdf",
-            neutral0: "white",
-        },
-    };
-};
 
 const Payment = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [enteredWord, setEnteredWord] = useState("");
-    const [enteredsubmitWord, setenteredsubmitWord] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
 
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [msisdn, setMsisdn] = useState("");
@@ -44,31 +22,10 @@ const Payment = () => {
 
     const [openMakeModal, setOpenMakeModal] = useState(false);
     const [policyQuoteId, setPolicyQuoteId] = useState("")
-
-    const [openUpdateModal, setOpenUpdateModel] = useState(false);
-    const [updateFirstName, setUpdateFirstName] = useState("")
-    const [updateLastName, setUpdateLastName] = useState("")
-    const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
-    const [activeData, setActiveData] = useState<any | undefined>({});
-    const [updateClientId, setUpdateClientId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
 
     const token = Cookies.get("token");
-
-    const handleStartDateChange = (date) => {
-        setStartDate(date);
-        if (endDate < date) {
-            setEndDate(date);
-        }
-    };
-
-    const handleEndDateChange = (date) => {
-        setEndDate(date);
-        if (date < startDate) {
-            setStartDate(date);
-        }
-    };
 
     const getAllPayment = async () => {
         try {
@@ -211,54 +168,6 @@ const Payment = () => {
         createClient(payData);
         setOpenCreateModal(false);
 
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
-    };
-
-    // update client ===========
-
-    const handleOpenUpdateModal = (e: any) => {
-        setOpenUpdateModel(true);
-        setUpdateFirstName(activeData?.fName);
-        setUpdateLastName(activeData?.sName);
-
-        setUpdateClientId(activeData?.id);
-    };
-
-    const handleCloseUpdateModal = (e: any) => {
-        e.preventDefault();
-        setOpenUpdateModel(false);
-    };
-
-    const updateClient = async (data: any, id) => {
-        try {
-            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
-                method: "PUT",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            const response = await dt.json();
-            console.log("response", response)
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const updateCycle = (e: any) => {
-        e.preventDefault();
-
-        const updateData = {
-            first_name: updateFirstName,
-            last_name: updateLastName,
-        };
-        updateClient(updateData, updateClientId);
-
-        setOpenUpdateModel(false);
     };
 
     // Pagination
@@ -538,8 +447,6 @@ const Payment = () => {
                 </Modal>
 
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };

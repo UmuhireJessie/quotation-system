@@ -1,15 +1,8 @@
 import Adminbar from "@/components/layout/AdminNav";
-import Footer from "@/components/layout/Footer";
-import { Icon } from "@iconify/react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import * as AiIcons from "react-icons/ai";
-import Select from "react-select";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 
@@ -18,11 +11,6 @@ const SMSReport = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [openCreateModal, setOpenCreateModal] = useState(false);
-    const [msisdn, setMsisdn] = useState("");
-    const [message, setMessage] = useState("");
-    const [msgRef, setMsgRef] = useState("");
-    const [senderId, setSenderId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
 
@@ -105,52 +93,7 @@ const SMSReport = () => {
     });
 
     console.log("filteredData", filteredData)
-
-    const numData = filteredData?.length
-
-
-
-    // Send SMS ===============
-
-    const handleOpenCreateClient = () => {
-        setOpenCreateModal(true);
-    };
-    const handleCloseCreateModel = () => {
-        setOpenCreateModal(false);
-    };
-    const createClient = async (data: any) => {
-        try {
-            const dt = await fetch("http://178.79.172.122:5000/sms/send/", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const response = await dt.json();
-            console.log("send sms", response)
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const createNewClient = (e: any) => {
-        e.preventDefault()
-        const regData = {
-            msisdn: msisdn,
-            message: message,
-            msgRef: msgRef,
-            sender_id: senderId
-        }
-        createClient(regData);
-        setOpenCreateModal(false);
-
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
-    };
-
+    
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(filteredData?.length / rowsPerPage);
@@ -329,89 +272,7 @@ const SMSReport = () => {
                 />
 
                 <hr style={{ marginBottom: "1.5rem" }} />
-
-                <Modal
-                    open={openCreateModal}
-                    onClose={handleCloseCreateModel}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
-                        <form
-                            action=""
-                            onSubmit={createNewClient}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-                        >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
-                                Send SMS
-                            </h1>
-                            <IoIcons.IoClose
-                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-                                onClick={handleCloseCreateModel}
-                            />
-                            <hr style={{ marginBottom: "4px" }} />
-                            <div>
-                                <input
-                                    type="text"
-                                    name="msisdn"
-                                    placeholder="Phone Number"
-                                    value={msisdn}
-                                    onChange={(e) => {
-                                        setMsisdn(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="message"
-                                    placeholder="Message"
-                                    value={message}
-                                    onChange={(e) => {
-                                        setMessage(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="msgRef"
-                                    placeholder="Message Reference"
-                                    value={msgRef}
-                                    onChange={(e) => {
-                                        setMsgRef(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                                />
-                            </div>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="senderId"
-                                    placeholder="Sender ID"
-                                    value={senderId}
-                                    onChange={(e) => {
-                                        setSenderId(e.target.value);
-                                    }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                            >
-                                Save
-                            </button>
-                        </form>
-                    </Box>
-                </Modal>
-
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };

@@ -1,13 +1,8 @@
 import Adminbar from "@/components/layout/AdminNav";
-import Footer from "@/components/layout/Footer";
-import { Icon } from "@iconify/react";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import * as AiIcons from "react-icons/ai";
-import Select from "react-select";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -108,10 +103,6 @@ const SMS = () => {
 
     console.log("filteredData", filteredData)
 
-    const numData = filteredData?.length
-
-
-
     // Send SMS ===============
 
     const handleOpenCreateClient = () => {
@@ -147,10 +138,6 @@ const SMS = () => {
         }
         createClient(regData);
         setOpenCreateModal(false);
-
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
     };
 
     // Pagination
@@ -391,8 +378,6 @@ const SMS = () => {
                 </Modal>
 
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };

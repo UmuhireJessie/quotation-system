@@ -29,10 +29,6 @@ const Quote = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [enteredWord, setEnteredWord] = useState("");
-    const [enteredsubmitWord, setenteredsubmitWord] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
 
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [policyQuoteType, setPolicyQuoteType] = useState("");
@@ -63,20 +59,6 @@ const Quote = () => {
 
 
     const token = Cookies.get("token");
-
-    const handleStartDateChange = (date) => {
-        setStartDate(date);
-        if (endDate < date) {
-            setEndDate(date);
-        }
-    };
-
-    const handleEndDateChange = (date) => {
-        setEndDate(date);
-        if (date < startDate) {
-            setStartDate(date);
-        }
-    };
 
     const getAllQuotes = async () => {
         try {
@@ -177,8 +159,6 @@ const Quote = () => {
 
     console.log("filteredData quote", filteredData)
 
-    const numData = filteredData?.length
-
     // Create client ===============
 
     const handleOpenCreateClient = () => {
@@ -218,10 +198,6 @@ const Quote = () => {
         };
         createClient(quoteData);
         setOpenCreateModal(false);
-
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
     };
 
     // Assigning client ==========
@@ -1000,8 +976,6 @@ const Quote = () => {
                 </Modal>
 
             </div>
-
-            {/* <Footer /> */}
         </>
     );
 };
