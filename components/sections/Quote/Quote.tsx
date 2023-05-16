@@ -362,7 +362,7 @@ const Quote = () => {
     // delete kyc
     const deleteFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/download?quoteId=${id}`, {
+            const dt = await fetch(`http://178.79.172.122:5000/files/?filename=${id}`, {
                 method: "DELETE",
                 headers: {
                     'Accept': 'application/json',
