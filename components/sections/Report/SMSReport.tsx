@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
+import handleExportData from "@/components/utils/ExportExcel";
 
 
 const SMSReport = () => {
@@ -144,7 +145,10 @@ const SMSReport = () => {
                     </button>
                     <button
                         className={" h-[35px] text-white flex items-center bg-[#48b857] pr-[10px] pl-[5px] mb-[20px]"}
-                        onClick={() => ""}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleExportData(currentRows, 'sms')
+                        }}
                     >
                     <BsIcons.BsFileExcelFill className="mx-[5px]" />
                         <span className="text-sm">Excel</span>

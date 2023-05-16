@@ -7,6 +7,7 @@ import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import handleExportData from "@/components/utils/ExportExcel";
 
 
 const ClientReport = () => {
@@ -77,7 +78,7 @@ const ClientReport = () => {
 
     const getAllUsers = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/auth/", {
+            const dt = await fetch("http://212.71.245.100:5000/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -155,7 +156,10 @@ const ClientReport = () => {
                     </button>
                     <button
                         className={" h-[35px] text-white flex items-center bg-[#48b857] pr-[10px] pl-[5px] mb-[20px]"}
-                        onClick={() => ""}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleExportData(currentRows, 'client')
+                        }}
                     >
                     <BsIcons.BsFileExcelFill className="mx-[5px]" />
                         <span className="text-sm">Excel</span>
@@ -175,10 +179,8 @@ const ClientReport = () => {
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0] pl-4">Date</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">First Name</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Last Name</Th>
-                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Role</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Email</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Phone Number</Th>
-                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Active</Th>
                         </Tr>
                     </Thead>
 
@@ -217,17 +219,6 @@ const ClientReport = () => {
                                 />
                             </Td>
                             <Td className="py-4">
-                                <select
-                                    className="block w-[5rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
-                                    value={filters.role}
-                                    onChange={(e) => handleFilterChange(e, 'role')}
-                                >
-                                    <option value="">All</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="call_center">Call Center</option>
-                                </select>
-                            </Td>
-                            <Td className="py-4">
                                 <input
                                     className="block w-[5rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
                                     type="email"
@@ -243,17 +234,6 @@ const ClientReport = () => {
                                     onChange={(e) => handleFilterChange(e, 'phoneNumber')}
                                 />
                             </Td>
-                            <Td className="py-4">
-                                <select
-                                    className="block w-[5rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
-                                    value={filters.isActive}
-                                    onChange={(e) => handleFilterChange(e, 'isActive')}
-                                >
-                                    <option value="">All</option>
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
-                            </Td>
                         </Tr>
                         {
                             currentRows?.length !== 0 ? (
@@ -263,10 +243,8 @@ const ClientReport = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{row.createdAt}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.fName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.sName}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.role}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.email}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.pNnumber}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.is_active ? <span className="bg-[#a4e9b3] rounded-[5px] px-[8px] py-[2px]">True</span> : <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">False</span>}</Td>
                                         </Tr>
                                     )
                                 })
@@ -274,9 +252,7 @@ const ClientReport = () => {
                                 <Tr style={{ backgroundColor: '#f7f7f7' }}>
                                     <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4"></Td>
                                     <Td className="py-[10px] border-b border-[#e6e6e6] text-sm"></Td>
-                                    <Td className="py-[10px] border-b border-[#e6e6e6] text-sm"></Td>
                                     <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">No Record Found</Td>
-                                    <Td className="py-[10px] border-b border-[#e6e6e6] text-sm"></Td>
                                     <Td className="py-[10px] border-b border-[#e6e6e6] text-sm"></Td>
                                     <Td className="py-[10px] border-b border-[#e6e6e6] text-sm"></Td>
                                 </Tr>
