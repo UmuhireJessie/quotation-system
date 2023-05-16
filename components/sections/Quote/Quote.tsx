@@ -749,13 +749,13 @@ const Quote = () => {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
+                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
                             onSubmit={createNewClient}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center font-bold dark:text-white text-[20px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Make Quotation
                             </h1>
                             <IoIcons.IoClose
@@ -766,17 +766,19 @@ const Quote = () => {
                             <div>
                                 <input
                                     type="text"
+                                    required
                                     name="policyQuoteType"
                                     placeholder="Policy Quote Type"
                                     value={policyQuoteType}
                                     onChange={(e) => {
                                         setPolicyQuoteType(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
+                                    required
                                     type="number"
                                     name="policyQuoteId"
                                     placeholder="Policy Quote Id"
@@ -784,36 +786,39 @@ const Quote = () => {
                                     onChange={(e) => {
                                         setPolicyQuoteId(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="text"
+                                    required
                                     name="policyHolderType"
                                     placeholder="Policy Holder Type"
                                     value={policyHolderType}
                                     onChange={(e) => {
                                         setPolicyHolderType(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="text"
+                                    required
                                     name="policyHolderName"
                                     placeholder="Policy Holder Name"
                                     value={policyHolderName}
                                     onChange={(e) => {
                                         setPolicyHolderName(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="date"
+                                    required
                                     name="validDate"
                                     defaultValue="Valid Date"
                                     min={new Date().toISOString().split("T")[0]}
@@ -821,25 +826,26 @@ const Quote = () => {
                                     onChange={(e) => {
                                         setValidDate(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="number"
+                                    required
                                     name="amount"
                                     placeholder="Amount"
                                     value={amount}
                                     onChange={(e) => {
                                         setAmount(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
 
                             <button
                                 type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
                                 style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                             >
                                 Save
@@ -847,92 +853,100 @@ const Quote = () => {
                         </form>
                     </Box>
                 </Modal>
+
                 <Modal
                     open={openUpdateModal}
                     onClose={handleCloseUpdateModal}
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
+                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
                             onSubmit={updateCycle}
-                            className="relative rounded-[5px] w-[100%] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center dark:text-white font-bold text-[22px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Update Quotation
                             </h1>
                             <IoIcons.IoClose
-                                style={{
-                                    position: "absolute",
-                                    top: "20px",
-                                    right: "20px",
-                                    fontSize: "35px",
-                                    cursor: "pointer",
-                                }}
+                                className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                                 onClick={handleCloseUpdateModal}
                             />
-                            <hr style={{ marginBottom: "40px" }} />
-                            <input
-                                type="text"
-                                name="policyQuoteType"
-                                placeholder="Policy Quote Type"
-                                value={updatePolicyQuoteType}
-                                onChange={(e) => {
-                                    setUpdatePolicyQuoteType(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                            />
-                            <input
-                                type="text"
-                                name="policyHolderType"
-                                placeholder="Policy Holder Type"
-                                value={updatePolicyHolderType}
-                                onChange={(e) => {
-                                    setUpdatePolicyHolderType(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                            />
-                            <input
-                                type="text"
-                                name="policyHolderName"
-                                placeholder="Policy Holder Name"
-                                value={updatePolicyHolderName}
-                                onChange={(e) => {
-                                    setUpdatePolicyHolderName(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                            />
-                            <input
-                                type="date"
-                                name="validDate"
-                                placeholder="Valid Date"
-                                value={updateValidDate}
-                                onChange={(e) => {
-                                    setUpdateValidDate(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                            />
-                            <input
-                                type="text"
-                                name="amount"
-                                placeholder="Amount"
-                                value={updateAmount}
-                                onChange={(e) => {
-                                    setUpdateAmount(e.target.value);
-                                }}
-                                className=" mt-3 bg-lime text-[16px] self-center py-1 rounded-[5px] h-[40px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
-                            />
-
-                            <div className="flex flex-wrap w-[300px] m-auto">
-                                <button
-                                    className="text-white border-[1px] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
-                                    style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
-                                    type="submit"
-                                >
-                                    Save
-                                </button>
+                            <hr style={{ marginBottom: "4px" }} />
+                            <div>
+                                <input
+                                    type="text"
+                                    required
+                                    name="policyQuoteType"
+                                    placeholder="Policy Quote Type"
+                                    value={updatePolicyQuoteType}
+                                    onChange={(e) => {
+                                        setUpdatePolicyQuoteType(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
                             </div>
+                            <div>
+                                <input
+                                    required
+                                    type="text"
+                                    name="policyHolderType"
+                                    placeholder="Policy Holder Type"
+                                    value={updatePolicyHolderType}
+                                    onChange={(e) => {
+                                        setUpdatePolicyHolderType(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    required
+                                    name="policyHolderName"
+                                    placeholder="Policy Holder Name"
+                                    value={updatePolicyHolderName}
+                                    onChange={(e) => {
+                                        setUpdatePolicyHolderName(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="date"
+                                    required
+                                    name="validDate"
+                                    placeholder="Valid Date"
+                                    min={new Date().toISOString().split("T")[0]}
+                                    value={updateValidDate}
+                                    onChange={(e) => {
+                                        setUpdateValidDate(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    name="amount"
+                                    placeholder="Amount"
+                                    value={updateAmount}
+                                    onChange={(e) => {
+                                        setUpdateAmount(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
+                            >
+                                Save
+                            </button>
                         </form>
                     </Box>
                 </Modal>
@@ -948,7 +962,7 @@ const Quote = () => {
                             onSubmit={handleAssignClient}
                             className="relative rounded-[5px] w-[100%] m-auto p-[10px] dark:bg-dark-bg bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Assign Client to Quotation
                             </h1>
                             <IoIcons.IoClose
@@ -994,7 +1008,7 @@ const Quote = () => {
                             onSubmit={handleUploadFile}
                             className="relative rounded-[5px] w-[100%] m-auto p-[10px] dark:bg-dark-bg bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Upload KYC
                             </h1>
                             <IoIcons.IoClose
@@ -1021,7 +1035,8 @@ const Quote = () => {
 
                             <div className="flex flex-wrap w-[300px] mx-auto mt-[20px]">
                                 <button
-                                    className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                    className="text-white border-[1px] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto]"
+                                    style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                                     type="submit"
                                 >
                                     Save

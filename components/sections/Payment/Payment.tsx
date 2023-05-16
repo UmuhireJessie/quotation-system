@@ -343,13 +343,13 @@ const Payment = () => {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box className="flex m-auto w-[50%] h-[100%] items-center justify-center">
+                    <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
                             onSubmit={createNewClient}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Send Payment
                             </h1>
                             <IoIcons.IoClose
@@ -359,44 +359,47 @@ const Payment = () => {
                             <hr style={{ marginBottom: "4px" }} />
                             <div>
                                 <input
-                                    type="text"
+                                    type="number"
                                     name="msisdn"
+                                    required
                                     placeholder="Phone Number"
                                     value={msisdn}
                                     onChange={(e) => {
                                         setMsisdn(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
-                                    type="text"
+                                    type="number"
+                                    required
                                     name="amount"
                                     placeholder="Amount"
                                     value={amount}
                                     onChange={(e) => {
                                         setAmount(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="text"
                                     name="gtwRef"
+                                    required
                                     placeholder="Gateway Reference"
                                     value={gtwRef}
                                     onChange={(e) => {
                                         setGtwRef(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
-
                             <button
                                 type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                             >
                                 Save
                             </button>
@@ -414,9 +417,9 @@ const Payment = () => {
                         <form
                             action=""
                             onSubmit={createMakePayment}
-                            className="relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+                            className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
-                            <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
+                            <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
                                 Make Payment
                             </h1>
                             <IoIcons.IoClose
@@ -426,19 +429,21 @@ const Payment = () => {
                             <hr style={{ marginBottom: "4px" }} />
                             <div>
                                 <input
-                                    type="text"
+                                    type="number"
+                                    required
                                     name="quoteId"
                                     placeholder="Policy Quote Id"
                                     value={policyQuoteId}
                                     onChange={(e) => {
                                         setPolicyQuoteId(e.target.value);
                                     }}
-                                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[1px] border-[#a8a8a8]  px-[10px] md:w-[90%] focus:outline-none focus:shadow-md"
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
                             </div>
                             <button
                                 type="submit"
-                                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                                className="text-white text-sm font-[500] h-[35px] w-[90px] block rounded-[5px] mb-[15px] mx-[auto]"
+                                style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                             >
                                 Save
                             </button>
