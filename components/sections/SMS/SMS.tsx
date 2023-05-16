@@ -3,7 +3,6 @@ import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import "react-datepicker/dist/react-datepicker.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
