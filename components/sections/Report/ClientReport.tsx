@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
 import * as IoIcons from "react-icons/io5";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import handleExportData from "@/components/utils/ExportExcel";
 import { useRef } from 'react';
@@ -14,6 +14,7 @@ import { exportToPDF } from "@/components/utils/ExportPDF";
 import { printTable } from "@/components/utils/Print";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { handleExportAndSendEmail } from "@/components/utils/ExportEmail";
 
 
 const ClientReport = () => {
@@ -31,8 +32,11 @@ const ClientReport = () => {
     const handleOpenSendEmailModal = () => {
         setOpenSendEmailModal(true);
     }
-    const handleSendEmailReport = () => {
-        return;
+    const handleSendEmailReport = (e:any) => {
+        e.preventDefault();
+        handleExportAndSendEmail(filteredData, reportEmail, 'client')
+        setReportEmail('')
+        setOpenSendEmailModal(false)
     }
 
     const token = Cookies.get("token");
@@ -326,7 +330,7 @@ const ClientReport = () => {
                                     style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                                     type="submit"
                                 >
-                                    Save
+                                    Send
                                 </button>
                             </div>
                         </form>

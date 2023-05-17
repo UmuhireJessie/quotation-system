@@ -12,6 +12,8 @@ import { exportToPDF } from "@/components/utils/ExportPDF";
 import { printTable } from "@/components/utils/Print";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { handleExportAndSendEmail } from "@/components/utils/ExportEmail";
+import { ToastContainer } from "react-toastify";
 
 
 const SMSReport = () => {
@@ -29,8 +31,11 @@ const SMSReport = () => {
     const handleOpenSendEmailModal = () => {
         setOpenSendEmailModal(true);
     }
-    const handleSendEmailReport = () => {
-        return;
+    const handleSendEmailReport = (e:any) => {
+        e.preventDefault();
+        handleExportAndSendEmail(filteredData, reportEmail, 'sms')
+        setReportEmail('')
+        setOpenSendEmailModal(false)
     }
 
 
@@ -124,6 +129,13 @@ const SMSReport = () => {
     return (
         <>
             <Adminbar />
+            <ToastContainer
+                autoClose={2000}
+                hideProgressBar={true}
+                closeOnClick
+                pauseOnHover
+                style={{ width: "300px", height: "100px" }}
+            />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">SMS Report</h4>
@@ -330,7 +342,7 @@ const SMSReport = () => {
                                     style={{ background: "linear-gradient(270deg, #60b848 1.64%, #009677 98.36%)" }}
                                     type="submit"
                                 >
-                                    Save
+                                    Send
                                 </button>
                             </div>
                         </form>
