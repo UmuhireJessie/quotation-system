@@ -44,18 +44,18 @@ const Users = () => {
     const token = Cookies.get("token");
     const router = useRouter()
 
-    if (token) {
-        const decoded: any = jwt_decode(token);
-        const currentTime = Date.now() / 1000; // convert to seconds
-        if (decoded.expires < currentTime) {
-            toast.info("You've been signed out! Sign in again")
-            Cookies.remove("token");
-            router.push("/");
-            console.log('Token has expired')
-        }
-    } else {
-        router.push("/")
-    }
+    // if (token) {
+    //     const decoded: any = jwt_decode(token);
+    //     const currentTime = Date.now() / 1000; // convert to seconds
+    //     if (decoded.expires < currentTime) {
+    //         toast.info("You've been signed out! Sign in again")
+    //         Cookies.remove("token");
+    //         router.push("/");
+    //         console.log('Token has expired')
+    //     }
+    // } else {
+    //     router.push("/")
+    // }
 
     const [filters, setFilters] = useState({
         dateStart: '',

@@ -39,22 +39,22 @@ export const sidebarItems2 = [
 export const sidebarItems3 = [
   {
     path: "/client-report",
-    icon: <Icon icon="heroicons-solid:document"></Icon>,
+    icon: <Icon icon="jam:pie-chart-alt"></Icon>,
     title: "Client Details",
   },
   {
     path: "/quote-report",
-    icon: <Icon icon="heroicons-solid:document"></Icon>,
+    icon: <Icon icon="jam:pie-chart-alt"></Icon>,
     title: "Quotation Details",
   },
   {
     path: "/sms-report",
-    icon: <Icon icon="heroicons-solid:document"></Icon>,
+    icon: <Icon icon="jam:pie-chart-alt"></Icon>,
     title: "SMS Details",
   },
   {
     path: "/payment-report",
-    icon: <Icon icon="heroicons-solid:document"></Icon>,
+    icon: <Icon icon="jam:pie-chart-alt"></Icon>,
     title: "Payment Details",
   }
 ];
