@@ -1,7 +1,6 @@
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { convertToExportFormatQuote, convertToExportFormatClient, convertToExportFormatPay, convertToExportFormatSMS } from './Formats';
-
+import { convertToExportFormatQuote, convertToExportFormatClient, convertToExportFormatPay, convertToExportFormatSMS, convertToExportFormatLogs} from './Formats';
 
 const handleExportData = (data: any, report: any) => {
     let exportedData: any;
@@ -13,6 +12,8 @@ const handleExportData = (data: any, report: any) => {
         exportedData = convertToExportFormatPay(data);
     } if (report == 'sms') {
         exportedData = convertToExportFormatSMS(data);
+    } if (report == 'logs') {
+        exportedData = convertToExportFormatLogs(data);
     }
 
     const workbook = XLSX.utils.book_new();

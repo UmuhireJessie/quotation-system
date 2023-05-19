@@ -69,6 +69,21 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
         .concat(data.map((row: any) => {
             return `${row.createdAt},${row.pNnumber},${row.amount},${row.quoteId},${row.gtwRef}, ${row.status}`;
         })).join('\n');
+    } if (type === 'logs') {
+        columnHeaders = [
+            'CreationDate',
+            'IpAddress',
+            'HostName',
+            'Description',
+            'FirstName',
+            'LastName',
+            'Role'
+        ];
+
+        csvData = [columnHeaders]
+        .concat(data.map((row: any) => {
+            return `${row.createdAt},${row.ipAddress},${row.hostName},${row.description},${row.fName}, ${row.sName}, ${row.role}`;
+        })).join('\n');
     }
 
     const zip = new JSZip();

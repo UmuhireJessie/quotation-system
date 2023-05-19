@@ -14,7 +14,7 @@ const sidebar = () => {
           </Link>
         </div>
         <div className="mb-2">
-          <ul className=" min:mt-0 pl-4 block mt-6">
+          <ul className=" min:mt-0 pl-4 block mt-4">
             {sidebarItems1.map((items, index) => {
               return (
                 <li

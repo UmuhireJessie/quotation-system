@@ -48,10 +48,24 @@ export const convertToExportFormatSMS = (dataToFormat) => {
         return {
             CreationDate: row.createdAt,
             PhoneNumber: row.pNnumber,
-            Message: row.Message,
+            Message: row.message,
             QuoteId: row.quoteId,
             GatewayReference: row.gtwRef,
             Status: row.status
+        };
+    });
+    return formattedData;
+};
+export const convertToExportFormatLogs = (dataToFormat) => {
+    const formattedData = dataToFormat.map((row: any) => {
+        return {
+            CreationDate: row.createdAt,
+            IpAddress: row.ipAddress,
+            HostName: row.hostName,
+            Description: row.description,
+            FirstName: row.fName,
+            LastName: row.sName,
+            Role: row.role
         };
     });
     return formattedData;

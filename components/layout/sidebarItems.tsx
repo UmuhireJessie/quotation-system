@@ -56,5 +56,10 @@ export const sidebarItems3 = [
     path: "/payment-report",
     icon: <Icon icon="jam:pie-chart-alt"></Icon>,
     title: "Payment Details",
+  },
+  {
+    path: "/audit",
+    icon: <Icon icon="jam:pie-chart-alt"></Icon>,
+    title: "Audit Logs",
   }
 ];
