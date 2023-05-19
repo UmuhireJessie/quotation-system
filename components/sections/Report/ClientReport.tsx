@@ -101,7 +101,7 @@ const ClientReport = () => {
 
     const getAllUsers = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/client/", {
+            const dt = await fetch("http://178.79.172.122:5000/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

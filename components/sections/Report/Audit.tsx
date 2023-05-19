@@ -44,7 +44,7 @@ const Audit = () => {
 
     const getAllLogs = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/logs/", {
+            const dt = await fetch("http://178.79.172.122:5000/logs/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -121,6 +121,16 @@ const Audit = () => {
     });
 
     console.log("filteredData", filteredData)
+
+    const option = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      };
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -275,7 +285,7 @@ const Audit = () => {
                                 currentRows?.map((row: any, index: any) => {
                                     return (
                                         <Tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f7f7f7' : '#ffffff' }}>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{new Date(row.createdAt).toLocaleString()}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{(row.createdAt).replace("T", ", ")}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.ipAddress}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.hostName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.description}</Td>

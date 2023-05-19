@@ -29,7 +29,7 @@ const SMS = () => {
 
     const getAllSMS = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/sms/", {
+            const dt = await fetch("http://178.79.172.122:5000/sms/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const SMS = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/sms/send/", {
+            const dt = await fetch("http://178.79.172.122:5000/sms/send/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {

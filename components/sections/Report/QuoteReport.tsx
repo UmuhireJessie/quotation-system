@@ -42,7 +42,7 @@ const QuoteReport = () => {
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("http://178.79.172.122:5000/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const QuoteReport = () => {
     // Get one client ==========
     const getOneClient = async (id: any) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
+            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
