@@ -44,7 +44,7 @@ const Audit = () => {
 
     const getAllLogs = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/logs/", {
+            const dt = await fetch("http://212.71.245.100:5000/logs/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

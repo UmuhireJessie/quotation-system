@@ -116,7 +116,7 @@ const Users = () => {
 
     const getAllUsers = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/auth/", {
+            const dt = await fetch("http://212.71.245.100:5000/auth/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -146,7 +146,7 @@ const Users = () => {
     };
     const createUser = async (data: any) => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/auth/registration", {
+            const dt = await fetch("http://212.71.245.100:5000/auth/registration", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {

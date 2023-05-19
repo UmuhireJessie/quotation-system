@@ -110,7 +110,7 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
     };
 
     try {
-        const response = await axios.post('http://178.79.172.122:5000/email/file', formData, config);
+        const response = await axios.post('http://212.71.245.100:5000/email/file', formData, config);
         if (response.status === 200) {
             toast.success("Report sent successfully.", {
                 className: 'font-[sans-serif] text-sm'

@@ -63,7 +63,7 @@ const Quote = () => {
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/quatation/", {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -173,7 +173,7 @@ const Quote = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/quatation/", {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -232,7 +232,7 @@ const Quote = () => {
     // Assigning client ==========
     const getOneClient = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/client/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -251,7 +251,7 @@ const Quote = () => {
     }
     const getAllClients = async () => {
         try {
-            const dt = await fetch("http://178.79.172.122:5000/client/", {
+            const dt = await fetch("http://212.71.245.100:5000/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -291,7 +291,7 @@ const Quote = () => {
 
     const assignClient = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/quatation/asign/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/quatation/asign/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -358,7 +358,7 @@ const Quote = () => {
     };
     const uploadFile = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/upload?quoteId=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/upload?quoteId=${id}`, {
                 method: "POST",
                 body: data,
                 headers: {
@@ -389,7 +389,7 @@ const Quote = () => {
     // Download kyc
     const downloadFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/download?quoteId=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -418,7 +418,7 @@ const Quote = () => {
     // delete kyc
     const deleteFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/files/?filename=${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/files/?filename=${id}`, {
                 method: "DELETE",
                 headers: {
                     'Accept': 'application/json',
@@ -466,7 +466,7 @@ const Quote = () => {
 
     const updateClient = async (data: any, id) => {
         try {
-            const dt = await fetch(`http://178.79.172.122:5000/quatation/${id}`, {
+            const dt = await fetch(`http://212.71.245.100:5000/quatation/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
