@@ -275,7 +275,7 @@ const Audit = () => {
                                 currentRows?.map((row: any, index: any) => {
                                     return (
                                         <Tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#f7f7f7' : '#ffffff' }}>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{row.createdAt}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{new Date(row.createdAt).toLocaleString()}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.ipAddress}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.hostName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.description}</Td>
