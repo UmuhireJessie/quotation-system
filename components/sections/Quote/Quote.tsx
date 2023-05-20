@@ -75,7 +75,7 @@ const Quote = () => {
             setData(response?.data)
             console.log("First response quote", response)
             return response;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
@@ -263,7 +263,7 @@ const Quote = () => {
             setClientData(response?.data)
             console.log("response", response)
             return response;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error, {
                 className: 'font-[sans-serif] text-sm'
@@ -313,7 +313,7 @@ const Quote = () => {
                 });
             }
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error, {
                 className: 'font-[sans-serif] text-sm'
@@ -857,18 +857,24 @@ const Quote = () => {
                                 />
                             </div>
                             <div>
-                                <input
-                                    type="date"
-                                    required
-                                    name="validDate"
-                                    defaultValue="Valid Date"
-                                    min={new Date().toISOString().split("T")[0]}
-                                    value={validDate}
-                                    onChange={(e) => {
-                                        setValidDate(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
+                                <div className="relative">
+                                    {(!validDate) && (
+                                        <div className="absolute inset-0 flex text-sm items-center justify-center pointer-events-none text-[#a8a8a8]">
+                                            ~ Valid Date
+                                        </div>
+                                    )}
+                                    <input
+                                        type="date"
+                                        required
+                                        name="validDate"
+                                        value={validDate}
+                                        onChange={(e) => {
+                                            setValidDate(e.target.value);
+                                        }}
+                                        className={`bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8] px-[10px] w-[85%] focus:outline-none focus:shadow-md ${!validDate && 'text-[#a8a8a8]'}`}
+                                    />
+
+                                </div>
                             </div>
                             <div>
                                 <input
@@ -955,18 +961,24 @@ const Quote = () => {
                                 />
                             </div>
                             <div>
-                                <input
-                                    type="date"
-                                    required
-                                    name="validDate"
-                                    placeholder="Valid Date"
-                                    min={new Date().toISOString().split("T")[0]}
-                                    value={updateValidDate}
-                                    onChange={(e) => {
-                                        setUpdateValidDate(e.target.value);
-                                    }}
-                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
-                                />
+                                <div className="relative">
+                                    {(!validDate) && (
+                                        <div className="absolute inset-0 flex text-sm items-center justify-center pointer-events-none text-[#a8a8a8]">
+                                            ~ Valid Date
+                                        </div>
+                                    )}
+                                    <input
+                                        type="date"
+                                        required
+                                        name="validDate"
+                                        value={validDate}
+                                        onChange={(e) => {
+                                            setValidDate(e.target.value);
+                                        }}
+                                        className={`bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8] px-[10px] w-[85%] focus:outline-none focus:shadow-md ${!validDate && 'text-[#a8a8a8]'}`}
+                                    />
+
+                                </div>
                             </div>
                             <div>
                                 <input
