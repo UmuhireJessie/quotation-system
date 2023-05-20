@@ -39,7 +39,7 @@ const Login = () => {
         setLoading(false);
         console.log(token)
         Cookies.set("token", token);
-        window.location.href = "/clients";
+        window.location.href = "/dashboard";
       } else {
         setLoading(false);
         toast.error(response.detail);

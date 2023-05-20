@@ -56,7 +56,7 @@ const Quote = () => {
     const [activeData, setActiveData] = useState<any | undefined>({});
     const [updateQuoteId, setUpdateQuoteId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const [isCreated, setIsCreated] = useState(false)
+    const [isCreated, setIsCreated] = useState('')
 
 
     const token = Cookies.get("token");
@@ -195,7 +195,7 @@ const Quote = () => {
                 setPolicyHolderName("")
                 setAmount("")
                 setValidDate("")
-                setIsCreated(true)
+                setIsCreated('added')
                 toast.success('Quotation added successfully!', {
                     className: 'font-[sans-serif] text-sm'
                 });
@@ -307,7 +307,7 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
-                setIsCreated(true)
+                setIsCreated('assigned')
                 toast.success('Client assigned successfully!', {
                     className: 'font-[sans-serif] text-sm'
                 });
@@ -482,7 +482,14 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
-                setIsCreated(true)
+                setIsCreated('updated')
+                setUpdatePolicyQuoteType('')
+                setUpdatePolicyHolderType('')
+                setUpdatePolicyHolderName('')
+                setUpdateDoc('')
+                setUpdateValidDate('')
+                setUpdateAmount('')
+                setUpdateQuoteId('');
                 toast.success('Quotation updated successfully!', {
                     className: 'font-[sans-serif] text-sm'
                 });
@@ -962,7 +969,7 @@ const Quote = () => {
                             </div>
                             <div>
                                 <div className="relative">
-                                    {(!validDate) && (
+                                    {(!updateValidDate) && (
                                         <div className="absolute inset-0 flex text-sm items-center justify-center pointer-events-none text-[#a8a8a8]">
                                             ~ Valid Date
                                         </div>
@@ -970,12 +977,12 @@ const Quote = () => {
                                     <input
                                         type="date"
                                         required
-                                        name="validDate"
-                                        value={validDate}
+                                        name="updateValidDate"
+                                        value={updateValidDate}
                                         onChange={(e) => {
-                                            setValidDate(e.target.value);
+                                            setUpdateValidDate(e.target.value);
                                         }}
-                                        className={`bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8] px-[10px] w-[85%] focus:outline-none focus:shadow-md ${!validDate && 'text-[#a8a8a8]'}`}
+                                        className={`bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8] px-[10px] w-[85%] focus:outline-none focus:shadow-md ${!updateValidDate && 'text-[#a8a8a8]'}`}
                                     />
 
                                 </div>

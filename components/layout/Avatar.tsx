@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 import Avatar from "../assets/images/userAvatar.png";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
+
 
 const AvatarWithDropdown = () => {
   const router = useRouter();
@@ -37,11 +39,12 @@ const AvatarWithDropdown = () => {
         <Image src={Avatar} alt="User Avatar" />
       </button>
       {showDropdown && (
-        <div className="absolute top-10 right-0 w-48 py-2 bg-white rounded-lg shadow-xl">
+        <div className="absolute top-10 right-0 w-40 py-2 bg-white rounded-lg border shadow-xl">
           <button
             onClick={handleLogout}
-            className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center"
           >
+            <Icon icon="tabler:logout-2" className="text-[#707072] text-[18px] mr-4"></Icon>
             Logout
           </button>
         </div>
