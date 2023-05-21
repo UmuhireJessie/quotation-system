@@ -19,7 +19,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-[#12BF9C] text-white w-[30%] rounded-lg p-6 mr-9">
+          <div className="bg-[#009677] text-white w-[30%] rounded-lg p-6 mr-9">
             <div className="flex flex-col">
               <div className="flex flex-row text-white font-semibold justify-end items-end">
                 <span className="text-2xl pr-2">10,000</span>
@@ -31,14 +31,14 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="bg-[#88DD71] text-white w-[30%] rounded-lg p-6">
+          <div className="bg-[#60b848] text-white w-[30%] rounded-lg p-6">
             <div className="flex flex-col">
               <div className="flex flex-row text-white font-semibold justify-end items-end">
                 <span className="text-2xl pr-2">982</span>
               </div>
               <div className="mt-4">
                 <p className="text-[16px] font-medium">Quotes</p>
-                <p className="text-gray-200 text-sm">Total payed quotes</p>
+                <p className="text-gray-300 text-sm">Total payed quotes</p>
               </div>
             </div>
           </div>

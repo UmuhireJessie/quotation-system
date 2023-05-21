@@ -428,7 +428,7 @@ const Quote = () => {
             });
             const response = await dt.json();
             console.log("response delete", response)
-            if (response.status == "success") {
+            if (response.filename) {
                 toast.success("KYC deleted successfully!", {
                     className: 'font-[sans-serif] text-sm'
                 })
