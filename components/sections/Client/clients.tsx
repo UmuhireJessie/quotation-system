@@ -57,8 +57,14 @@ const Clients = () => {
 
     useEffect(() => {
         getAllClients()
-        setIsCreated(false)
-    }, [isCreated])
+        if (openUpdateModal && activeData) {
+            setUpdateFirstName(activeData?.fName);
+            setUpdateLastName(activeData?.sName);
+            setUpdatePNnumber(activeData?.pNnumber);
+            setUpdateEmail(activeData?.email);
+        }
+        setIsCreated(false);
+    }, [isCreated, openUpdateModal, activeData])
 
     const [filters, setFilters] = useState({
         dateStart: '',
@@ -171,11 +177,6 @@ const Clients = () => {
 
     const handleOpenUpdateModal = (e: any) => {
         setOpenUpdateModel(true);
-        setUpdateFirstName(activeData?.fName);
-        setUpdateLastName(activeData?.sName);
-        setUpdatePNnumber(activeData?.pNnumber);
-        setUpdateEmail(activeData?.email);
-
         setUpdateClientId(activeData?.id);
     };
 
