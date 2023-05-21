@@ -56,7 +56,7 @@ const Quote = () => {
     const [activeData, setActiveData] = useState<any | undefined>({});
     const [updateQuoteId, setUpdateQuoteId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const [isCreated, setIsCreated] = useState('')
+    const [isCreated, setIsCreated] = useState(false)
 
 
     const token = Cookies.get("token");
@@ -86,6 +86,7 @@ const Quote = () => {
     useEffect(() => {
         getAllQuotes()
         getAllClients()
+        setIsCreated(false);
     }, [isCreated])
 
     const [filters, setFilters] = useState({
@@ -189,13 +190,13 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
+                setIsCreated(true)
                 setPolicyQuoteType("")
                 setPolicyQuoteId("")
                 setPolicyHolderType("")
                 setPolicyHolderName("")
                 setAmount("")
                 setValidDate("")
-                setIsCreated('added')
                 toast.success('Quotation added successfully!', {
                     className: 'font-[sans-serif] text-sm'
                 });
@@ -307,7 +308,7 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
-                setIsCreated('assigned')
+                setIsCreated(true)
                 toast.success('Client assigned successfully!', {
                     className: 'font-[sans-serif] text-sm'
                 });
@@ -482,7 +483,7 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
-                setIsCreated('updated')
+                setIsCreated(true)
                 setUpdatePolicyQuoteType('')
                 setUpdatePolicyHolderType('')
                 setUpdatePolicyHolderName('')

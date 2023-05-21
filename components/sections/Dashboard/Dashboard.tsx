@@ -2,6 +2,7 @@ import Adminbar from "@/components/layout/AdminNav";
 import Footer from "@/components/layout/Footer";
 
 const Dashboard = () => {
+
   return (
     <>
       <Adminbar />
@@ -11,7 +12,6 @@ const Dashboard = () => {
             <div className="flex flex-col">
               <div className="flex flex-row text-white font-semibold justify-end items-end">
                 <span className="text-2xl pr-2">200</span>
-                <span className="text-sm">RWF</span>
               </div>
               <div className="mt-4">
                 <p className="text-[16px] font-medium">Transactions</p>
@@ -55,6 +55,7 @@ const Dashboard = () => {
               </div>
               <div className="flex flex-row font-semibold justify-end items-end">
                 <span className="text-2xl pr-2 mb-[3rem]">982</span>
+                <span className="text-sm pr-2 mb-[3rem]">RWF</span>
               </div>
             </div>
           </div>

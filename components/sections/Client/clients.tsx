@@ -57,6 +57,7 @@ const Clients = () => {
 
     useEffect(() => {
         getAllClients()
+        setIsCreated(false)
     }, [isCreated])
 
     const [filters, setFilters] = useState({

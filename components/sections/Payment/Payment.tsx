@@ -25,6 +25,7 @@ const Payment = () => {
     const [openMakeModal, setOpenMakeModal] = useState(false);
     const [policyQuoteId, setPolicyQuoteId] = useState("")
     const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [isCreated, setIsCreated] = useState(false)
 
 
     const token = Cookies.get("token");
@@ -43,7 +44,7 @@ const Payment = () => {
             setData(response.data)
             console.log("response", response)
             return response;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
@@ -54,7 +55,8 @@ const Payment = () => {
 
     useEffect(() => {
         getAllPayment()
-    }, [])
+        setIsCreated(false)
+    }, [isCreated])
 
     const [filters, setFilters] = useState({
         dateStart: '',
@@ -129,10 +131,17 @@ const Payment = () => {
 
             const response = await dt.json();
             console.log("Pay", response)
-            toast.success('Payment created successfully!', {
-                className: 'font-[sans-serif] text-sm'
-            })
-        } catch (error:any) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setIsCreated(true)
+                toast.success('Payment created successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                })
+            }
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
@@ -160,11 +169,24 @@ const Payment = () => {
 
             const response = await dt.json();
             console.log("Pay", response)
-            toast.success('Payment sent successfully!', {
-                className: 'font-[sans-serif] text-sm'
-            })
-        } catch (error:any) {
+            if (response?.detail) {
+                toast.error(response.detail, {
+                    className: 'font-[sans-serif] text-sm'
+                });
+            } else {
+                setIsCreated(true)
+                setMsisdn("")
+                setAmount("")
+                setGtwRef("")
+                toast.success('Payment sent successfully!', {
+                    className: 'font-[sans-serif] text-sm'
+                })
+            }
+        } catch (error: any) {
             console.error(error);
+            setMsisdn("")
+            setAmount("")
+            setGtwRef("")
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
             })

@@ -217,6 +217,7 @@ const Users = () => {
 
     useEffect(() => {
         getAllUsers()
+        setIsCreated(false)
     }, [isCreated])
 
     return (

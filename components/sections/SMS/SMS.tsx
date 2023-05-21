@@ -51,7 +51,8 @@ const SMS = () => {
 
     useEffect(() => {
         getAllSMS()
-    }, [])
+        setIsCreated(false)
+    }, [isCreated])
 
     const [filters, setFilters] = useState({
         dateStart: '',
