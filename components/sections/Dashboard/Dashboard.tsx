@@ -15,7 +15,7 @@ const Dashboard = () => {
               </div>
               <div className="mt-4">
                 <p className="text-[16px] font-medium">Transactions</p>
-                <p className="text-gray-300 text-sm">Total transactions made</p>
+                <p className="text-gray-300 text-sm">Total payments made</p>
               </div>
             </div>
           </div>

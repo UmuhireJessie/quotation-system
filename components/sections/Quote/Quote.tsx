@@ -86,8 +86,16 @@ const Quote = () => {
     useEffect(() => {
         getAllQuotes()
         getAllClients()
+        if (openUpdateModal && activeData) {
+            setUpdatePolicyQuoteType(activeData.policyQuoteType);
+            setUpdatePolicyHolderType(activeData.policyHolderType);
+            setUpdatePolicyHolderName(activeData.policyHolderName);
+            setUpdateDoc(activeData.document);
+            setUpdateValidDate(activeData.validDate);
+            setUpdateAmount(activeData.amount);
+        }
         setIsCreated(false);
-    }, [isCreated])
+    }, [isCreated, openUpdateModal, activeData])
 
     const [filters, setFilters] = useState({
         dateStart: '',
@@ -453,13 +461,6 @@ const Quote = () => {
 
     const handleOpenUpdateModal = (e: any) => {
         setOpenUpdateModel(true);
-        setUpdatePolicyQuoteType(activeData?.policyQuoteType)
-        setUpdatePolicyHolderType(activeData?.policyHolderType)
-        setUpdatePolicyHolderName(activeData?.policyHolderName)
-        setUpdateDoc(activeData?.document)
-        setUpdateValidDate(activeData?.validDate)
-        setUpdateAmount(activeData?.amount)
-
         setUpdateQuoteId(activeData?.id);
     };
 
@@ -1014,6 +1015,7 @@ const Quote = () => {
                         </form>
                     </Box>
                 </Modal>
+
                 <Modal
                     open={openAssignModal}
                     onClose={handleCloseAssignModal}
@@ -1060,6 +1062,7 @@ const Quote = () => {
                         </form>
                     </Box>
                 </Modal>
+                
                 <Modal
                     open={openUploadModal}
                     onClose={handleCloseUploadModal}
