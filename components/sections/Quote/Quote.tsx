@@ -389,32 +389,35 @@ const Quote = () => {
 
     // Download kyc
     const downloadFile = async (id: any) => {
-        try {
-            const dt = await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-            const response = await dt.json();
-            console.log("response download", response)
-            if (response.status == "success") {
-                toast.success("KYC added successfully!", {
-                    className: 'font-[sans-serif] text-sm'
-                })
-            } else {
-                toast.error(response?.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                })
-            }
+        await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Authorization": `Bearer ${token}`,
+            },
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a temporary URL for the blob
+                const url = URL.createObjectURL(blob);
 
-        } catch (error: any) {
-            console.error(error);
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
+                // Create a link element
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'kyc.pdf'; // Set the desired file name
+
+                // Simulate a click on the link to trigger the download
+                link.click();
+
+                // Clean up the temporary URL
+                URL.revokeObjectURL(url);
             })
-        }
+            .catch(error => {
+                console.error('Error downloading file:', error);
+                toast.error("Download failed. Try again!", {
+                    className: 'font-[sans-serif] text-sm'
+                })
+            });
     };
     // delete kyc
     const deleteFile = async (id: any) => {
