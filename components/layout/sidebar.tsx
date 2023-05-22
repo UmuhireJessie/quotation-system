@@ -3,8 +3,13 @@ import { sidebarItems1, sidebarItems2, sidebarItems3 } from "./sidebarItems";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../assets/images/navlogo.png"
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 
 const sidebar = () => {
+  const token = Cookies.get("token");
+  const decodedToken = jwt.decode(token);
+  const role = decodedToken?.role;
   return (
     <>
       <div className="top-0 bottom-0 w-[16rem] grow z-10 fixed bg-white border-r border-[#e7e5e5] ">
@@ -16,6 +21,9 @@ const sidebar = () => {
         <div className="mb-2">
           <ul className=" min:mt-0 pl-4 block mt-4">
             {sidebarItems1.map((items, index) => {
+              // if (items.path === '/users' && role !== 'admin') {
+              //   return null;
+              // }
               return (
                 <li
                   key={index}
