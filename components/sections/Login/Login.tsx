@@ -36,6 +36,8 @@ const Login = () => {
 
       console.log("response", response)
       if (response.token) {
+        setEmail("");
+        setPassword("");
         setLoading(false);
         console.log(token)
         Cookies.set("token", token);
@@ -62,9 +64,6 @@ const Login = () => {
     };
     console.log("loginData", loginData)
     loginUser(loginData)
-
-    setEmail("");
-    setPassword("");
   };
 
   return (

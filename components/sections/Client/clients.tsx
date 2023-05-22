@@ -48,10 +48,12 @@ const Clients = () => {
 
             const response = await dt.json();
             setData(response.data)
-            console.log("response", response)
             return response;
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
         }
     }
 
@@ -62,6 +64,7 @@ const Clients = () => {
             setUpdateLastName(activeData?.sName);
             setUpdatePNnumber(activeData?.pNnumber);
             setUpdateEmail(activeData?.email);
+            setUpdateClientId(activeData?.id);
         }
         setIsCreated(false);
     }, [isCreated, openUpdateModal, activeData])
@@ -111,8 +114,6 @@ const Clients = () => {
         );
     });
 
-    console.log("filteredData", filteredData)
-
     // Create client ===============
 
     const handleOpenCreateClient = () => {
@@ -133,7 +134,6 @@ const Clients = () => {
             });
 
             const response = await dt.json();
-            console.log("response", response)
             if (response?.detail) {
                 toast.error(response.detail, {
                     className: 'font-[sans-serif] text-sm'
@@ -149,7 +149,6 @@ const Clients = () => {
                 });
             }
         } catch (error: any) {
-            console.error(error);
             setEmail("")
             setPNumber("")
             setFirstName("")
@@ -177,7 +176,6 @@ const Clients = () => {
 
     const handleOpenUpdateModal = (e: any) => {
         setOpenUpdateModel(true);
-        setUpdateClientId(activeData?.id);
     };
 
     const handleCloseUpdateModal = (e: any) => {
@@ -197,7 +195,7 @@ const Clients = () => {
             });
 
             const response = await dt.json();
-            console.log("response", response)
+            console.log("response client update", response)
             if (response?.detail) {
                 toast.error(response.detail, {
                     className: 'font-[sans-serif] text-sm'
@@ -210,13 +208,15 @@ const Clients = () => {
             }
 
         } catch (error: any) {
-            console.error(error);
+            // console.error(error);
             setUpdateFirstName("");
             setUpdateLastName("");
             setUpdatePNnumber("");
             setUpdateEmail("");
             setUpdateClientId("");
-            toast.error(error.message)
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            });
         }
     };
 

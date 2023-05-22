@@ -73,10 +73,8 @@ const Quote = () => {
 
             const response = await dt.json();
             setData(response?.data)
-            console.log("First response quote", response)
             return response;
         } catch (error: any) {
-            console.error(error);
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
             })
@@ -93,6 +91,7 @@ const Quote = () => {
             setUpdateDoc(activeData.document);
             setUpdateValidDate(activeData.validDate);
             setUpdateAmount(activeData.amount);
+            setUpdateQuoteId(activeData?.id);
         }
         setIsCreated(false);
     }, [isCreated, openUpdateModal, activeData])
@@ -105,7 +104,6 @@ const Quote = () => {
         policyHolderType: '',
         policyHolderName: '',
         document: '',
-        validDate: '',
         status: '',
         amount: '',
         clientId: ''
@@ -116,7 +114,7 @@ const Quote = () => {
     };
 
     const filteredData = data?.filter((row: any) => {
-        const date = new Date(row.createdAt);
+        const date = new Date(row.validDate);
         const dateStart = filters.dateStart ? new Date(filters.dateStart) : null;
         const dateEnd = filters.dateEnd ? new Date(filters.dateEnd) : null;
         const isDateInRange =
@@ -133,10 +131,6 @@ const Quote = () => {
         const policyQuoteTypeMatch = row.policyQuoteType
             .toLowerCase()
             .includes(filters.policyQuoteType.toLowerCase());
-
-        const validDateMatch = row.validDate
-            .toLowerCase()
-            .includes(filters.validDate.toLowerCase());
 
         // const documentMatch = row.document?.toLowerCase()
         //     .includes(filters.document.toLowerCase());
@@ -161,7 +155,6 @@ const Quote = () => {
             policyHolderTypeMatch &&
             amountMatch &&
             policyQuoteTypeMatch &&
-            validDateMatch &&
             policyQuoteIdMatch &&
             policyHolderNameMatch &&
             statusMatch
@@ -192,7 +185,6 @@ const Quote = () => {
             });
 
             const response = await dt.json();
-            console.log("response create quote", response)
             if (response?.detail) {
                 toast.error(response.detail, {
                     className: 'font-[sans-serif] text-sm'
@@ -210,7 +202,6 @@ const Quote = () => {
                 });
             }
         } catch (error: any) {
-            console.error(error);
             setPolicyQuoteType("")
             setPolicyQuoteId("")
             setPolicyHolderType("")
@@ -270,10 +261,8 @@ const Quote = () => {
 
             const response = await dt.json();
             setClientData(response?.data)
-            console.log("response", response)
             return response;
         } catch (error: any) {
-            console.error(error);
             toast.error(error, {
                 className: 'font-[sans-serif] text-sm'
             });
@@ -461,7 +450,6 @@ const Quote = () => {
 
     const handleOpenUpdateModal = (e: any) => {
         setOpenUpdateModel(true);
-        setUpdateQuoteId(activeData?.id);
     };
 
     const handleCloseUpdateModal = (e: any) => {
@@ -1062,7 +1050,7 @@ const Quote = () => {
                         </form>
                     </Box>
                 </Modal>
-                
+
                 <Modal
                     open={openUploadModal}
                     onClose={handleCloseUploadModal}

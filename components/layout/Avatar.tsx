@@ -18,7 +18,6 @@ const AvatarWithDropdown = () => {
 
     // decode the JWT token
     const decodedToken = jwt.decode(token);
-    console.log("decodedToken", decodedToken)
     const capitalizedRole = decodedToken?.role.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     setRole(capitalizedRole);
@@ -39,8 +38,6 @@ const AvatarWithDropdown = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     router.push("/");
-
-    console.log("Logging out...");
   };
 
   return (

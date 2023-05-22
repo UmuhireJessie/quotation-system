@@ -71,7 +71,6 @@ const QuoteReport = () => {
         policyHolderType: '',
         policyHolderName: '',
         document: '',
-        validDate: '',
         status: '',
         amount: '',
         clientId: ''
@@ -82,7 +81,7 @@ const QuoteReport = () => {
     };
 
     const filteredData = data?.filter((row: any) => {
-        const date = new Date(row.createdAt);
+        const date = new Date(row.validDate);
         const dateStart = filters.dateStart ? new Date(filters.dateStart) : null;
         const dateEnd = filters.dateEnd ? new Date(filters.dateEnd) : null;
         const isDateInRange =
@@ -99,10 +98,6 @@ const QuoteReport = () => {
         const policyQuoteTypeMatch = row.policyQuoteType
             .toLowerCase()
             .includes(filters.policyQuoteType.toLowerCase());
-
-        const validDateMatch = row.validDate
-            .toLowerCase()
-            .includes(filters.validDate.toLowerCase());
 
         const documentMatch = row.document?.toLowerCase()
             .includes(filters.document.toLowerCase());
@@ -127,7 +122,6 @@ const QuoteReport = () => {
             policyHolderTypeMatch &&
             amountMatch &&
             policyQuoteTypeMatch &&
-            validDateMatch &&
             policyQuoteIdMatch &&
             policyHolderNameMatch &&
             statusMatch &&
