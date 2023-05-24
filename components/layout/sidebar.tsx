@@ -14,7 +14,7 @@ const sidebar = () => {
     <>
       <div className="top-0 bottom-0 w-[16rem] grow z-10 fixed bg-white border-r border-[#e7e5e5] ">
         <div>
-          <Link href="/">
+          <Link href="">
             <Image className="mt-0 ml-[25px]  bg-transparent" src={logo} alt="Old Mutual" width={140} height={70} />
           </Link>
         </div>
