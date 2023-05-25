@@ -40,7 +40,7 @@ const Quote = () => {
     const [amount, setAmount] = useState("");
 
     const [openUpdateModal, setOpenUpdateModel] = useState(false);
-    const [openUploadModal, setOpenUploadModel] = useState(false);
+    const [openUploadModal, setOpenUploadModal] = useState(false);
     const [kycFile, setKycFile] = useState<File | null>(null);
     const [updatePolicyQuoteType, setUpdatePolicyQuoteType] = useState("")
     const [updatePolicyHolderType, setUpdatePolicyHolderType] = useState("")
@@ -332,13 +332,13 @@ const Quote = () => {
 
     // upload kyc
     const handleOpenUploadModal = (e: any) => {
-        setOpenUploadModel(true);
+        setOpenUploadModal(true);
 
         setUpdateQuoteId(activeData?.id);
     };
     const handleCloseUploadModal = (e: any) => {
         e.preventDefault();
-        setOpenUploadModel(false);
+        setOpenUploadModal(false);
     };
     const handleUploadFile = (e: any) => {
         e.preventDefault();
@@ -351,7 +351,7 @@ const Quote = () => {
         }
 
         setKycFile(null)
-        setOpenUploadModel(false);
+        setOpenUploadModal(false);
 
     };
     const uploadFile = async (data: any, id: any) => {
@@ -360,13 +360,12 @@ const Quote = () => {
                 method: "POST",
                 body: data,
                 headers: {
-                    'Accept': 'application/json',
+                    "Accept": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
             });
             const response = await dt.json();
-            console.log("response", response)
-            if (response.status == "success") {
+            if (response.status === "success") {
                 toast.success("KYC added successfully!", {
                     className: 'font-[sans-serif] text-sm'
                 })
@@ -682,7 +681,7 @@ const Quote = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderType}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.clientId}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.document}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{!(row.document) ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">No File</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">Done</span>}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.amount}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.validDate}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.status == 'pending' ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">pending</span> : row.status == 'asigned' ? <span className="bg-[#e6e1a6] rounded-[5px] px-[8px] py-[2px]">assigned</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">paid</span>}</Td>
@@ -693,7 +692,8 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] mr-2 rounded-[5px] bg-[#5bcf5b] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={(e) => {
-                                                                    setUpdateQuoteId(row.id)
+                                                                    setActiveData(row)
+                                                                    setUpdateQuoteId(activeData?.id)
                                                                     handleOpenAssignModal(e);
                                                                 }}
                                                             >
@@ -721,10 +721,10 @@ const Quote = () => {
                                                                 <span>update</span>
                                                             </button>
                                                         </span>
-                                                    ) : (
+                                                    ) : row.status === 'paid' && !(row.document) ? (
                                                         <span className="inline-block">
                                                             <button
-                                                                className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] flex items-center py-[5px] px-[7px] mb-[4px]"}
+                                                                className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={(e) => {
                                                                     setActiveData(row)
                                                                     handleOpenUploadModal(e);
@@ -735,7 +735,8 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
-                                                                    downloadFile(row.id)
+                                                                    setActiveData(row)
+                                                                    downloadFile(activeData?.id)
                                                                 }}
                                                             >
                                                                 <span>download</span>
@@ -743,10 +744,41 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={() => {
-                                                                    deleteFile(row.id)
+                                                                    setActiveData(row)
+                                                                    deleteFile(activeData?.id)
                                                                 }}
                                                             >
                                                                 <span>delete</span>
+                                                            </button>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-block">
+                                                            <button
+                                                                className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] items-center py-[5px] px-[7px] mb-[4px]"}
+                                                                onClick={(e) => {
+                                                                    setActiveData(row)
+                                                                    handleOpenUploadModal(e);
+                                                                }}
+                                                            >
+                                                                <span>upload</span>
+                                                            </button>
+                                                            <button
+                                                                className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
+                                                                onClick={() => {
+                                                                    setActiveData(row)
+                                                                    downloadFile(activeData?.id)
+                                                                }}
+                                                            >
+                                                                <span>download</span>
+                                                            </button>
+                                                            <button
+                                                                className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
+                                                                onClick={() => {
+                                                                    setActiveData(row)
+                                                                    deleteFile(activeData?.id)
+                                                                }}
+                                                            >
+                                                                <span>delete kyc</span>
                                                             </button>
                                                         </span>
                                                     )
@@ -1079,7 +1111,8 @@ const Quote = () => {
                             <hr style={{ marginBottom: "40px" }} />
                             <input
                                 type="file"
-                                name="kyc"
+                                name="file"
+                                accept="application/pdf"
                                 onChange={(e) => {
                                     const file = e?.target.files?.[0];
                                     setKycFile(file || null);
