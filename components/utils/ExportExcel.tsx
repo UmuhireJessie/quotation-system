@@ -2,16 +2,16 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { convertToExportFormatQuote, convertToExportFormatClient, convertToExportFormatPay, convertToExportFormatSMS, convertToExportFormatLogs} from './Formats';
 
-const handleExportData = (data: any, report: any) => {
+const handleExportData = async (data: any, report: any) => {
     let exportedData: any;
     if (report == 'quote') {
-        exportedData = convertToExportFormatQuote(data);
+        exportedData = await convertToExportFormatQuote(data);
     } if (report == 'client') {
         exportedData = convertToExportFormatClient(data);
     } if (report == 'pay') {
-        exportedData = convertToExportFormatPay(data);
+        exportedData = await convertToExportFormatPay(data);
     } if (report == 'sms') {
-        exportedData = convertToExportFormatSMS(data);
+        exportedData = await convertToExportFormatSMS(data);
     } if (report == 'logs') {
         exportedData = convertToExportFormatLogs(data);
     }

@@ -5,10 +5,66 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 
-export const handleExportAndSendEmail = async (data: any, email: any, type:any) => {
-    const token = Cookies.get("token");
-    let columnHeaders:any;
-    let csvData:any;
+
+const clientInfoMap = {};
+const quoteInfoMap = {};
+const token = Cookies.get("token");
+
+const getAllClients = async () => {
+    try {
+        const dt = await fetch("http://212.71.245.100:5000/client/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        const response = await dt.json();
+        const Allclients = response?.data || [];
+
+        Allclients.forEach((client) => {
+            const clientIdentity = `${client.fName} | ${client.pNnumber}`;
+            clientInfoMap[client.id] = clientIdentity;
+        });
+
+    } catch (error: any) {
+        toast.error(error, {
+            className: 'font-[sans-serif] text-sm'
+        });
+    }
+}
+
+const getAllQuotes = async () => {
+    try {
+        const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        const response = await dt.json();
+        const AllQuotes = response?.data || [];
+
+        AllQuotes.forEach((quote) => {
+            const quoteData = `${quote.policyQuoteId}`;
+            quoteInfoMap[quote.id] = quoteData;
+        });
+
+    } catch (error: any) {
+        toast.error(error, {
+            className: 'font-[sans-serif] text-sm'
+        });
+    }
+}
+
+export const handleExportAndSendEmail = async (data: any, email: any, type: any) => {
+    let columnHeaders: any;
+    let csvData: any;
+    await getAllClients()
+    await getAllQuotes()
 
     if (type === 'quote') {
         columnHeaders = [
@@ -17,7 +73,7 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
             'policyQuoteType',
             'policyHolderName',
             'policyHolderType',
-            'clientId',
+            'client',
             'document',
             'amount',
             'validDate',
@@ -25,9 +81,9 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
         ];
 
         csvData = [columnHeaders]
-        .concat(data.map((row: any) => {
-            return `${row.createdAt},${row.policyQuoteId},${row.policyQuoteType},${row.policyHolderName},${row.policyHolderType},${row.clientId},${row.document},${row.amount},${row.validDate},${row.status}`;
-        })).join('\n');
+            .concat(data.map((row: any) => {
+                return `"${row.createdAt}","${row.policyQuoteId}","${row.policyQuoteType}","${row.policyHolderName}","${row.policyHolderType}",${!(row.clientId) ? "" : clientInfoMap[row.clientId]},${!(row.document) ? "No File" : "Done"},"${row.amount}","${row.validDate}","${row.status}"`;
+            })).join('\n');
     } if (type === 'client') {
         columnHeaders = [
             'CreationDate',
@@ -38,9 +94,9 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
         ];
 
         csvData = [columnHeaders]
-        .concat(data.map((row: any) => {
-            return `${row.createdAt},${row.fName},${row.sName},${row.email},${row.pNnumber}`;
-        })).join('\n');
+            .concat(data.map((row: any) => {
+                return `"${row.createdAt}","${row.fName}","${row.sName}","${row.email}","${row.pNnumber}"`;
+            })).join('\n');
     } if (type === 'sms') {
         columnHeaders = [
             'CreationDate',
@@ -48,13 +104,13 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
             'Message',
             'QuoteId',
             'GatewayReference',
-            'Status' 
+            'Status'
         ];
 
         csvData = [columnHeaders]
-        .concat(data.map((row: any) => {
-            return `${row.createdAt},${row.pNnumber},${row.message},${row.quoteId},${row.gtwRef}, ${row.status}`;
-        })).join('\n');
+            .concat(data.map((row: any) => {
+                return `"${row.createdAt}","${row.pNnumber}","${row.message}","${quoteInfoMap[row.quoteId]}","${row.gtwRef}","${row.status}"`;
+            })).join('\n');
     } if (type === 'pay') {
         columnHeaders = [
             'CreationDate',
@@ -62,13 +118,13 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
             'Amount',
             'QuoteId',
             'GatewayReference',
-            'Status' 
+            'Status'
         ];
 
         csvData = [columnHeaders]
-        .concat(data.map((row: any) => {
-            return `${row.createdAt},${row.pNnumber},${row.amount},${row.quoteId},${row.gtwRef}, ${row.status}`;
-        })).join('\n');
+            .concat(data.map((row: any) => {
+                return `"${row.createdAt}","${row.pNnumber}","${row.amount}","${quoteInfoMap[row.quoteId]}","${row.gtwRef}", "${row.status}"`;
+            })).join('\n');
     } if (type === 'logs') {
         columnHeaders = [
             'CreationDate',
@@ -81,9 +137,9 @@ export const handleExportAndSendEmail = async (data: any, email: any, type:any) 
         ];
 
         csvData = [columnHeaders]
-        .concat(data.map((row: any) => {
-            return `${row.createdAt},${row.ipAddress},${row.hostName},${row.description},${row.fName}, ${row.sName}, ${row.role}`;
-        })).join('\n');
+            .concat(data.map((row: any) => {
+                return `"${row.createdAt}","${row.ipAddress}","${row.hostName}","${row.description}","${row.fName}", "${row.sName}", "${row.role}"`;
+            })).join('\n');
     }
 
     const zip = new JSZip();
