@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
 import * as IoIcons from "react-icons/io5";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import handleExportData from "@/components/utils/ExportExcel";
 import { useRef } from 'react';
@@ -19,10 +19,11 @@ import { handleExportAndSendEmail } from "@/components/utils/ExportEmail";
 const QuoteReport = () => {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [reportEmail, setReportEmail] = useState("")
     const [openSendEmailModal, setOpenSendEmailModal] = useState(false)
+    const [clientInfo, setClientInfo] = useState({});
     const tableRef = useRef(null);
 
     const handleCloseSendEmailModal = () => {
@@ -31,7 +32,7 @@ const QuoteReport = () => {
     const handleOpenSendEmailModal = () => {
         setOpenSendEmailModal(true);
     }
-    const handleSendEmailReport = (e:any) => {
+    const handleSendEmailReport = (e: any) => {
         e.preventDefault();
         handleExportAndSendEmail(filteredData, reportEmail, 'quote')
         setReportEmail('')
@@ -59,8 +60,37 @@ const QuoteReport = () => {
         }
     }
 
+    const getAllClients = async () => {
+        try {
+            const dt = await fetch("http://212.71.245.100:5000/client/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            const response = await dt.json();
+            const Allclients = response?.data || [];
+
+            const clientInfoMap = {};
+            Allclients.forEach((client) => {
+                const clientIdentity = `${client.fName} | ${client.pNnumber}`;
+                clientInfoMap[client.id] = clientIdentity;
+            });
+            setClientInfo(clientInfoMap);
+            setIsLoading(false);
+
+        } catch (error: any) {
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
+        }
+    }
+
     useEffect(() => {
         getAllQuotes()
+        getAllClients()
     }, [])
 
     const [filters, setFilters] = useState({
@@ -99,8 +129,12 @@ const QuoteReport = () => {
             .toLowerCase()
             .includes(filters.policyQuoteType.toLowerCase());
 
-        const documentMatch = row.document?.toLowerCase()
-            .includes(filters.document.toLowerCase());
+        const documentMatch =
+            filters.document === "null"
+                ? row.document === null
+                : filters.document === "notNull"
+                    ? row.document !== null
+                    : true;
 
         const policyQuoteIdMatch = row.policyQuoteId
             .toLowerCase()
@@ -114,8 +148,9 @@ const QuoteReport = () => {
             .toLowerCase()
             .includes(filters.status.toLowerCase());
 
-        const clientIdMatch = row.clientId?.toLowerCase()
-            .includes(filters.clientId.toLowerCase());
+        const clientIdMatch =
+            filters.clientId === '' ||
+            (row.clientId && clientInfo[row.clientId]?.toLowerCase().includes(filters.clientId.toLowerCase()));
 
         return (
             isDateInRange &&
@@ -125,33 +160,11 @@ const QuoteReport = () => {
             policyQuoteIdMatch &&
             policyHolderNameMatch &&
             statusMatch &&
-            clientIdMatch &&
-            documentMatch
+            documentMatch &&
+            clientIdMatch
+
         );
     });
-
-    console.log("filteredData", filteredData)
-
-    // Get one client ==========
-    const getOneClient = async (id: any) => {
-        try {
-            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            const response = await dt.json();
-            const clientIdentity: any = `${response?.data?.sName} | ${response?.data?.pNnumber} `
-
-            console.log("response", response)
-            return clientIdentity;
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -234,7 +247,7 @@ const QuoteReport = () => {
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Quote ID</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Holder Name</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Holder Type</Th>
-                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Client ID</Th>
+                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Client</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">KYC</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Amount</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Valid Date</Th>
@@ -285,12 +298,15 @@ const QuoteReport = () => {
                                 />
                             </Td>
                             <Td className="py-4">
-                                <input
-                                    className="block w-[4rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
-                                    type="text"
+                                <select
+                                    className="block w-[5rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
                                     value={filters.document}
                                     onChange={(e) => handleFilterChange(e, 'document')}
-                                />
+                                >
+                                    <option value="">All</option>
+                                    <option value="null">No File</option>
+                                    <option value="notNull">Done</option>
+                                </select>
                             </Td>
                             <Td className="py-4">
                                 <input
@@ -325,6 +341,7 @@ const QuoteReport = () => {
                                     <option value="">All</option>
                                     <option value="asigned">Assigned</option>
                                     <option value="paid">Paid</option>
+                                    <option value="pending">Pending</option>
                                 </select>
                             </Td>
                         </Tr>
@@ -337,8 +354,8 @@ const QuoteReport = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyQuoteId}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderType}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.clientId}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.document}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{isLoading ? 'Loading...' : clientInfo[row.clientId]}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{!(row.document) ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">No File</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">Done</span>}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.amount}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.validDate}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.status == 'pending' ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">pending</span> : row.status == 'asigned' ? <span className="bg-[#e6e1a6] rounded-[5px] px-[8px] py-[2px]">assigned</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">paid</span>}</Td>

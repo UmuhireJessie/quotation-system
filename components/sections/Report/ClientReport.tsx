@@ -97,8 +97,6 @@ const ClientReport = () => {
         );
     });
 
-    console.log("filteredData", filteredData)
-
     const getAllUsers = async () => {
         try {
             const dt = await fetch("http://212.71.245.100:5000/client/", {

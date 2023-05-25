@@ -13,17 +13,18 @@ import { printTable } from "@/components/utils/Print";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { handleExportAndSendEmail } from "@/components/utils/ExportEmail";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const PaymentReport = () => {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const tableRef = useRef(null);
     const [reportEmail, setReportEmail] = useState("")
     const [openSendEmailModal, setOpenSendEmailModal] = useState(false)
+    const [quoteInfo, setQuoteInfo] = useState({});
 
     const handleCloseSendEmailModal = () => {
         setOpenSendEmailModal(false);
@@ -59,9 +60,38 @@ const PaymentReport = () => {
         }
     }
 
+    const getAllQuotes = async () => {
+        try {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            const response = await dt.json();
+            const AllQuotes = response?.data || [];
+
+            const quoteInfoMap = {};
+            AllQuotes.forEach((quote) => {
+                const quoteData = `${quote.policyQuoteId}`;
+                quoteInfoMap[quote.id] = quoteData;
+            });
+            setQuoteInfo(quoteInfoMap);
+            setIsLoading(false);
+
+        } catch (error: any) {
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
+        }
+    }
+
 
     useEffect(() => {
         getAllPayment()
+        getAllQuotes()
     }, [])
 
     const [filters, setFilters] = useState({
@@ -98,9 +128,9 @@ const PaymentReport = () => {
             .toLowerCase()
             .includes(filters.gtwRef.toLowerCase());
 
-        const quoteIdMatch = row.quoteId
-            .toLowerCase()
-            .includes(filters.quoteId.toLowerCase());
+        const quoteIdMatch =
+            filters.quoteId === '' ||
+            (row.quoteId && quoteInfo[row.quoteId]?.toLowerCase().includes(filters.quoteId.toLowerCase()));
 
         const statusMatch = row.status
             .toLowerCase()
@@ -116,8 +146,6 @@ const PaymentReport = () => {
             statusMatch
         );
     });
-
-    console.log("filteredData", filteredData)
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -277,7 +305,7 @@ const PaymentReport = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{row.createdAt}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.pNnumber}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.amount}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.quoteId}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{isLoading ? 'Loading...' : quoteInfo[row.quoteId]}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.gtwRef}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.status == 'pending' ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">pending</span> : row.status == 'failed' ? <span className="bg-[#e6a8a6] rounded-[5px] px-[8px] py-[2px]">failed</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">sent</span>}</Td>
                                         </Tr>

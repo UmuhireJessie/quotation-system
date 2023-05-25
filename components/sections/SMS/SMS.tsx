@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 const SMS = () => {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [msisdn, setMsisdn] = useState("");
     const [message, setMessage] = useState("");
@@ -23,6 +23,7 @@ const SMS = () => {
     const [senderId, setSenderId] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [isCreated, setIsCreated] = useState(false)
+    const [quoteInfo, setQuoteInfo] = useState({});
 
 
     const token = Cookies.get("token");
@@ -41,7 +42,7 @@ const SMS = () => {
             setData(response.data)
             console.log("response", response)
             return response;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error, {
                 className: 'font-[sans-serif] text-sm'
@@ -51,6 +52,7 @@ const SMS = () => {
 
     useEffect(() => {
         getAllSMS()
+        getAllQuotes()
         setIsCreated(false)
     }, [isCreated])
 
@@ -88,9 +90,9 @@ const SMS = () => {
             .toLowerCase()
             .includes(filters.gtwRef.toLowerCase());
 
-        const quoteIdMatch = row.quoteId
-            .toLowerCase()
-            .includes(filters.quoteId.toLowerCase());
+        const quoteIdMatch =
+            filters.quoteId === '' ||
+            (row.quoteId && quoteInfo[row.quoteId]?.toLowerCase().includes(filters.quoteId.toLowerCase()));
 
         const statusMatch = row.status
             .toLowerCase()
@@ -106,8 +108,6 @@ const SMS = () => {
             statusMatch
         );
     });
-
-    console.log("filteredData", filteredData)
 
     // Send SMS ===============
 
@@ -143,7 +143,7 @@ const SMS = () => {
                     className: 'font-[sans-serif] text-sm'
                 });
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             setMsisdn("")
             setMessage("")
@@ -155,7 +155,7 @@ const SMS = () => {
         }
     };
 
-    const createNewClient = (e: any) => {
+    const createNewSMS = (e: any) => {
         e.preventDefault()
         const regData = {
             msisdn: msisdn,
@@ -166,6 +166,34 @@ const SMS = () => {
         createClient(regData);
         setOpenCreateModal(false);
     };
+
+    const getAllQuotes = async () => {
+        try {
+            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            const response = await dt.json();
+            const AllQuotes = response?.data || [];
+
+            const quoteInfoMap = {};
+            AllQuotes.forEach((quote) => {
+                const quoteData = `${quote.policyQuoteId}`;
+                quoteInfoMap[quote.id] = quoteData;
+            });
+            setQuoteInfo(quoteInfoMap);
+            setIsLoading(false);
+
+        } catch (error: any) {
+            toast.error(error, {
+                className: 'font-[sans-serif] text-sm'
+            });
+        }
+    }
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -300,7 +328,7 @@ const SMS = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm pl-4">{row.createdAt}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.pNnumber}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.message}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.quoteId}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{isLoading ? 'Loading...' : quoteInfo[row.quoteId]}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.gtwRef}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.status == 'pending' ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">pending</span> : row.status == 'failed' ? <span className="bg-[#e6a8a6] rounded-[5px] px-[8px] py-[2px]">failed</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">sent</span>}</Td>
                                         </Tr>
@@ -341,7 +369,7 @@ const SMS = () => {
                     <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
-                            onSubmit={createNewClient}
+                            onSubmit={createNewSMS}
                             className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
                             <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">

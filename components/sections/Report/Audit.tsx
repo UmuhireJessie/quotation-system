@@ -120,8 +120,6 @@ const Audit = () => {
         );
     });
 
-    console.log("filteredData", filteredData)
-
     const option = {
         year: 'numeric',
         month: '2-digit',
