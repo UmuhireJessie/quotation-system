@@ -92,6 +92,8 @@ const Quote = () => {
             setUpdateValidDate(activeData.validDate);
             setUpdateAmount(activeData.amount);
             setUpdateQuoteId(activeData?.id);
+        } if ((openUploadModal && activeData) || (openAssignModal && activeData)) {
+            setUpdateQuoteId(activeData.id)
         }
         setIsCreated(false);
     }, [isCreated, openUpdateModal, activeData])
@@ -385,36 +387,38 @@ const Quote = () => {
 
     // Download kyc
     const downloadFile = async (id: any) => {
-        await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                "Authorization": `Bearer ${token}`,
-            },
-        })
-            .then(response => response.blob())
-            .then(blob => {
-                // Create a temporary URL for the blob
-                const url = URL.createObjectURL(blob);
+        try {
+            const response = await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
 
-                // Create a link element
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'kyc.pdf'; // Set the desired file name
-
-                // Simulate a click on the link to trigger the download
-                link.click();
-
-                // Clean up the temporary URL
-                URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                console.error('Error downloading file:', error);
-                toast.error("Download failed. Try again!", {
+            if (response.status === 200) {
+                const blob = await response.blob();
+                
+                // Create a temporary anchor element to initiate the download
+                const anchor = document.createElement('a');
+                const objectUrl = URL.createObjectURL(blob);
+                anchor.href = objectUrl;
+                anchor.download = 'kyc.pdf';
+                anchor.click();
+                URL.revokeObjectURL(objectUrl);
+            } else {
+                const errorData = await response.json();
+                toast.error(errorData.detail, {
                     className: 'font-[sans-serif] text-sm'
                 })
-            });
+            }
+        } catch (error:any) {
+            toast.error(error.message, {
+                className: 'font-[sans-serif] text-sm'
+            })
+        }
     };
+    
     // delete kyc
     const deleteFile = async (id: any) => {
         try {
