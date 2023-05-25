@@ -94,8 +94,8 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <div className="bg-white w-[64%] rounded-lg p-6 mr-9 border shadow-md">
-            Chart
+          <div className="bg-white w-[64%] rounded-lg p-6 mr-9 border shadow-md text-sm">
+            Chart showing days vs amount from quote paid
           </div>
           <div className="bg-white w-[30%] rounded-lg p-6 border shadow-md">
             <div className="flex flex-col">
