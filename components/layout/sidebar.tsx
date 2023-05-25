@@ -5,11 +5,13 @@ import Image from "next/image";
 import logo from "../assets/images/navlogo.png"
 import Cookies from "js-cookie";
 import jwt from "jsonwebtoken";
+import { useRouter } from "next/router";
 
 const sidebar = () => {
   const token = Cookies.get("token");
   const decodedToken = jwt.decode(token);
   const role = decodedToken?.role;
+  const router = useRouter();
   return (
     <>
       <div className="top-0 bottom-0 w-[16rem] h-[100%] grow z-10 fixed bg-white border-r border-[#e7e5e5] ">
@@ -31,9 +33,9 @@ const sidebar = () => {
                 >
                   <Link
                     href={items.path}
-                    className="focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"
+                    className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] p-1 flex align-items-center leading-3 font-medium" : "focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"}
                   >
-                    <label className="mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer">{items.icon}</label>
+                    <label className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] mr-3 p-1 text-[16px] cursor-pointer" : "focus:text-[#3e8d38] mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer"}>{items.icon}</label>
                     <label className="p-1 cursor-pointer">{items.title} </label>
                   </Link>
                 </li>
@@ -52,9 +54,9 @@ const sidebar = () => {
                 >
                   <Link
                     href={items.path}
-                    className="focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"
+                    className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] p-1 flex align-items-center leading-3 font-medium" : "focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"}
                   >
-                    <label className="mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer">{items.icon}</label>
+                    <label className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] mr-3 p-1 text-[16px] cursor-pointer" : "focus:text-[#3e8d38] mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer"}>{items.icon}</label>
                     <label className="p-1 cursor-pointer">{items.title} </label>
                   </Link>
                 </li>
@@ -73,9 +75,9 @@ const sidebar = () => {
                 >
                   <Link
                     href={items.path}
-                    className="focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"
+                    className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] p-1 flex align-items-center leading-3 font-medium" : "focus:text-[#3e8d38]  p-1 flex align-items-center leading-3 font-normal"}
                   >
-                    <label className="mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer">{items.icon}</label>
+                    <label className={router.pathname === items.path ? "text-[#3e8d38] focus:text-[#3e8d38] mr-3 p-1 text-[16px] cursor-pointer" : "focus:text-[#3e8d38] mr-3 p-1 text-[16px] text-[#696b6d] cursor-pointer"}>{items.icon}</label>
                     <label className="p-1 cursor-pointer">{items.title} </label>
                   </Link>
                 </li>
