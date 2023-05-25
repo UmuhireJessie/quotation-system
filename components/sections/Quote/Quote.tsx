@@ -28,14 +28,13 @@ const customTheme = (theme: any) => {
 const Quote = () => {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [policyQuoteType, setPolicyQuoteType] = useState("");
     const [policyQuoteId, setPolicyQuoteId] = useState("");
     const [policyHolderType, setPolicyHolderType] = useState("");
     const [policyHolderName, setPolicyHolderName] = useState("");
-    const [doc, setDoc] = useState("");
     const [validDate, setValidDate] = useState("");
     const [amount, setAmount] = useState("");
 
@@ -45,13 +44,12 @@ const Quote = () => {
     const [updatePolicyQuoteType, setUpdatePolicyQuoteType] = useState("")
     const [updatePolicyHolderType, setUpdatePolicyHolderType] = useState("")
     const [updatePolicyHolderName, setUpdatePolicyHolderName] = useState("")
-    const [updateDoc, setUpdateDoc] = useState("")
     const [updateValidDate, setUpdateValidDate] = useState("")
     const [updateAmount, setUpdateAmount] = useState("")
     const [openAssignModal, setOpenAssignModel] = useState(false);
     const [assignedClient, setAssignedClient] = useState("");
     const [clientData, setClientData] = useState([]);
-    const [oneClient, setOneClientData] = useState("");
+    const [clientInfo, setClientInfo] = useState({});
 
     const [activeData, setActiveData] = useState<any | undefined>({});
     const [updateQuoteId, setUpdateQuoteId] = useState("");
@@ -88,7 +86,6 @@ const Quote = () => {
             setUpdatePolicyQuoteType(activeData.policyQuoteType);
             setUpdatePolicyHolderType(activeData.policyHolderType);
             setUpdatePolicyHolderName(activeData.policyHolderName);
-            setUpdateDoc(activeData.document);
             setUpdateValidDate(activeData.validDate);
             setUpdateAmount(activeData.amount);
             setUpdateQuoteId(activeData?.id);
@@ -134,8 +131,12 @@ const Quote = () => {
             .toLowerCase()
             .includes(filters.policyQuoteType.toLowerCase());
 
-        // const documentMatch = row.document?.toLowerCase()
-        //     .includes(filters.document.toLowerCase());
+        const documentMatch =
+            filters.document === "null"
+                ? row.document === null
+                : filters.document === "notNull"
+                    ? row.document !== null
+                    : true;
 
         const policyQuoteIdMatch = row.policyQuoteId
             .toLowerCase()
@@ -149,8 +150,9 @@ const Quote = () => {
             .toLowerCase()
             .includes(filters.status.toLowerCase());
 
-        // const clientIdMatch = row.clientId?.toLowerCase()
-        //     .includes(filters.clientId?.toLowerCase());
+        const clientIdMatch =
+            filters.clientId === '' ||
+            (row.clientId && clientInfo[row.clientId]?.toLowerCase().includes(filters.clientId.toLowerCase()));
 
         return (
             isDateInRange &&
@@ -159,9 +161,9 @@ const Quote = () => {
             policyQuoteTypeMatch &&
             policyQuoteIdMatch &&
             policyHolderNameMatch &&
-            statusMatch
-            // documentMatch
-            // clientIdMatch
+            statusMatch &&
+            documentMatch &&
+            clientIdMatch
 
         );
     });
@@ -223,7 +225,6 @@ const Quote = () => {
             policyQuoteId: policyQuoteId,
             policyHolderType: policyHolderType,
             policyHolderName: policyHolderName,
-            document: doc,
             validDate: validDate,
             amount: amount
         };
@@ -231,26 +232,6 @@ const Quote = () => {
         setOpenCreateModal(false);
     };
 
-    // Assigning client ==========
-    const getOneClient = async (id: any) => {
-        try {
-            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-            const response = await dt.json();
-            const clientIdentity: any = `${response?.data?.sName} | ${response?.data?.pNnumber} `
-
-            console.log("response", response)
-            return clientIdentity;
-        } catch (error) {
-            console.error(error);
-        }
-    }
     const getAllClients = async () => {
         try {
             const dt = await fetch("http://212.71.245.100:5000/client/", {
@@ -262,8 +243,17 @@ const Quote = () => {
             });
 
             const response = await dt.json();
-            setClientData(response?.data)
-            return response;
+            const Allclients = response?.data || [];
+            setClientData(Allclients)
+
+            const clientInfoMap = {};
+            Allclients.forEach((client) => {
+                const clientIdentity = `${client.fName} | ${client.pNnumber}`;
+                clientInfoMap[client.id] = clientIdentity;
+            });
+            setClientInfo(clientInfoMap);
+            setIsLoading(false);
+
         } catch (error: any) {
             toast.error(error, {
                 className: 'font-[sans-serif] text-sm'
@@ -398,7 +388,7 @@ const Quote = () => {
 
             if (response.status === 200) {
                 const blob = await response.blob();
-                
+
                 // Create a temporary anchor element to initiate the download
                 const anchor = document.createElement('a');
                 const objectUrl = URL.createObjectURL(blob);
@@ -412,13 +402,13 @@ const Quote = () => {
                     className: 'font-[sans-serif] text-sm'
                 })
             }
-        } catch (error:any) {
+        } catch (error: any) {
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
             })
         }
     };
-    
+
     // delete kyc
     const deleteFile = async (id: any) => {
         try {
@@ -482,7 +472,6 @@ const Quote = () => {
                 setUpdatePolicyQuoteType('')
                 setUpdatePolicyHolderType('')
                 setUpdatePolicyHolderName('')
-                setUpdateDoc('')
                 setUpdateValidDate('')
                 setUpdateAmount('')
                 setUpdateQuoteId('');
@@ -496,7 +485,6 @@ const Quote = () => {
             setUpdatePolicyQuoteType('')
             setUpdatePolicyHolderType('')
             setUpdatePolicyHolderName('')
-            setUpdateDoc('')
             setUpdateValidDate('')
             setUpdateAmount('')
             setUpdateQuoteId('');
@@ -579,7 +567,7 @@ const Quote = () => {
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Quote ID</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Holder Name</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Policy Holder Type</Th>
-                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Client ID</Th>
+                            <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Client</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">KYC</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Amount</Th>
                             <Th className="text-start text-[14px] py-6 border-b border-[#e0e0e0]">Valid Date</Th>
@@ -631,12 +619,15 @@ const Quote = () => {
                                 />
                             </Td>
                             <Td className="py-4">
-                                <input
-                                    className="block w-[4rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
-                                    type="text"
+                                <select
+                                    className="block w-[5rem] border-2 border-[#e8ebe8] rounded-[5px] py-1 px-2 mr-4 focus:outline-none focus:shadow-sm text-sm"
                                     value={filters.document}
                                     onChange={(e) => handleFilterChange(e, 'document')}
-                                />
+                                >
+                                    <option value="">All</option>
+                                    <option value="null">No File</option>
+                                    <option value="notNull">Done</option>
+                                </select>
                             </Td>
                             <Td className="py-4">
                                 <input
@@ -684,7 +675,7 @@ const Quote = () => {
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyQuoteId}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderName}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.policyHolderType}</Td>
-                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.clientId}</Td>
+                                            <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{isLoading ? 'Loading...' : clientInfo[row.clientId]}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{!(row.document) ? <span className="bg-[#dde2de] rounded-[5px] px-[8px] py-[2px]">No File</span> : <span className="bg-[#a7e0b2] rounded-[5px] px-[8px] py-[2px]">Done</span>}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.amount}</Td>
                                             <Td className="py-[10px] border-b border-[#e6e6e6] text-sm">{row.validDate}</Td>
@@ -725,22 +716,12 @@ const Quote = () => {
                                                                 <span>update</span>
                                                             </button>
                                                         </span>
-                                                    ) : row.status === 'paid' && !(row.document) ? (
+                                                    ) : row.status === 'paid' && (row.document) ? (
                                                         <span className="inline-block">
-                                                            <button
-                                                                className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] items-center py-[5px] px-[7px] mb-[4px]"}
-                                                                onClick={(e) => {
-                                                                    setActiveData(row)
-                                                                    handleOpenUploadModal(e);
-                                                                }}
-                                                            >
-                                                                <span>upload</span>
-                                                            </button>
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
-                                                                    setActiveData(row)
-                                                                    downloadFile(activeData?.id)
+                                                                    downloadFile(row.id)
                                                                 }}
                                                             >
                                                                 <span>download</span>
@@ -748,11 +729,10 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={() => {
-                                                                    setActiveData(row)
-                                                                    deleteFile(activeData?.id)
+                                                                    deleteFile(row.id)
                                                                 }}
                                                             >
-                                                                <span>delete</span>
+                                                                <span>delete kyc</span>
                                                             </button>
                                                         </span>
                                                     ) : (
@@ -769,8 +749,7 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
-                                                                    setActiveData(row)
-                                                                    downloadFile(activeData?.id)
+                                                                    downloadFile(row.id)
                                                                 }}
                                                             >
                                                                 <span>download</span>
@@ -778,8 +757,7 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={() => {
-                                                                    setActiveData(row)
-                                                                    deleteFile(activeData?.id)
+                                                                    deleteFile(row.id)
                                                                 }}
                                                             >
                                                                 <span>delete kyc</span>
