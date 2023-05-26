@@ -716,26 +716,7 @@ const Quote = () => {
                                                                 <span>update</span>
                                                             </button>
                                                         </span>
-                                                    ) : row.status === 'paid' && (row.document) ? (
-                                                        <span className="inline-block">
-                                                            <button
-                                                                className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
-                                                                onClick={() => {
-                                                                    downloadFile(row.id)
-                                                                }}
-                                                            >
-                                                                <span>download</span>
-                                                            </button>
-                                                            <button
-                                                                className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
-                                                                onClick={() => {
-                                                                    deleteFile(row.id)
-                                                                }}
-                                                            >
-                                                                <span>delete kyc</span>
-                                                            </button>
-                                                        </span>
-                                                    ) : (
+                                                    ) : row.status === 'paid' && !(row.document) ? (
                                                         <span className="inline-block">
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#cbccc7] text-[#06091b] items-center py-[5px] px-[7px] mb-[4px]"}
@@ -746,6 +727,9 @@ const Quote = () => {
                                                             >
                                                                 <span>upload</span>
                                                             </button>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-block">
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
