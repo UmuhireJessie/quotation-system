@@ -358,6 +358,7 @@ const Quote = () => {
             });
             const response = await dt.json();
             if (response.status === "success") {
+                setIsCreated(true)
                 toast.success("KYC added successfully!", {
                     className: 'font-[sans-serif] text-sm'
                 })
@@ -422,6 +423,7 @@ const Quote = () => {
             const response = await dt.json();
             console.log("response delete", response)
             if (response.filename) {
+                setIsCreated(true)
                 toast.success("KYC deleted successfully!", {
                     className: 'font-[sans-serif] text-sm'
                 })

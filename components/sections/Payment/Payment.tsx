@@ -161,11 +161,12 @@ const Payment = () => {
 
             const response = await dt.json();
             console.log("Pay", response)
-            if (response?.detail) {
+            if (response?.detail !== "success") {
                 toast.error(response.detail, {
                     className: 'font-[sans-serif] text-sm'
                 });
             } else {
+                setPolicyQuoteId("")
                 setIsCreated(true)
                 toast.success('Payment created successfully!', {
                     className: 'font-[sans-serif] text-sm'
@@ -177,6 +178,12 @@ const Payment = () => {
                 className: 'font-[sans-serif] text-sm'
             })
         }
+    };
+    const createNewPayment = (e: any) => {
+        e.preventDefault()
+        createMakePayment(policyQuoteId)
+        
+        setOpenMakeModal(false);
     };
 
     // Send Payment ===============
@@ -488,7 +495,7 @@ const Payment = () => {
                     <Box className="flex m-auto w-[40%] h-[100%] items-center justify-center">
                         <form
                             action=""
-                            onSubmit={createMakePayment}
+                            onSubmit={createNewPayment}
                             className=" relative w-[100%] rounded-[5px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
                         >
                             <h1 className="text-center text-[#1b173f] font-bold text-[20px] m-[20px]">
