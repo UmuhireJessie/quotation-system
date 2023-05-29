@@ -1,8 +1,6 @@
 const Footer = () => {
   return (
-    <footer className='flex justify-center items-center p-[14px] absolute bottom-0 w-[100%] text-sm'>
-      <p>© 2023 OLD MUTUAL. All Rights Reserved.</p>
-    </footer>
+    <footer className="flex justify-center text-sm mb-2"><p>©2023 OldMutual. All Rights Reserved.</p></footer>
   );
 };
 
