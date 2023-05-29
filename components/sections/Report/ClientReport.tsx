@@ -6,8 +6,7 @@ import Cookies from "js-cookie";
 import * as BsIcons from "react-icons/bs";
 import * as IoIcons from "react-icons/io5";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 import handleExportData from "@/components/utils/ExportExcel";
 import { useRef } from 'react';
 import { exportToPDF } from "@/components/utils/ExportPDF";
@@ -99,7 +98,7 @@ const ClientReport = () => {
 
     const getAllUsers = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/client/", {
+            const dt = await fetch("https://insurance.e-fashe.com/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -130,13 +129,8 @@ const ClientReport = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Client Report</h4>

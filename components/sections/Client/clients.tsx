@@ -8,8 +8,7 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Clients = () => {
@@ -38,7 +37,7 @@ const Clients = () => {
 
     const getAllClients = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/client/", {
+            const dt = await fetch("https://insurance.e-fashe.com/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,7 +48,7 @@ const Clients = () => {
             const response = await dt.json();
             setData(response.data)
             return response;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error);
             toast.error(error.message, {
                 className: 'font-[sans-serif] text-sm'
@@ -124,7 +123,7 @@ const Clients = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/client/registration", {
+            const dt = await fetch("https://insurance.e-fashe.com/client/registration", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -135,27 +134,21 @@ const Clients = () => {
 
             const response = await dt.json();
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail)
             } else {
                 setEmail("")
                 setPNumber("")
                 setFirstName("")
                 setLastName("")
                 setIsCreated(true)
-                toast.success('Client added successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                return 'Client added successfully!'
             }
         } catch (error: any) {
             setEmail("")
             setPNumber("")
             setFirstName("")
             setLastName("")
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            });
+            throw new Error(error.message)
         }
     };
 
@@ -167,7 +160,13 @@ const Clients = () => {
             first_name: firstName,
             last_name: lastName,
         };
-        createClient(regData);
+        toast.promise(createClient(regData), {
+            loading: 'creating client...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
         setOpenCreateModal(false);
 
     };
@@ -185,7 +184,7 @@ const Clients = () => {
 
     const updateClient = async (data: any, id) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/client/${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/client/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -244,13 +243,8 @@ const Clients = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Clients</h4>

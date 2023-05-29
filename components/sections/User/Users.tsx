@@ -10,8 +10,7 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from "next/router";
 
 const customTheme = (theme: any) => {
@@ -116,7 +115,7 @@ const Users = () => {
 
     const getAllUsers = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/auth/", {
+            const dt = await fetch("https://insurance.e-fashe.com/auth/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -146,7 +145,7 @@ const Users = () => {
     };
     const createUser = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/auth/registration", {
+            const dt = await fetch("https://insurance.e-fashe.com/auth/registration", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -157,9 +156,7 @@ const Users = () => {
             const response = await dt.json();
             console.log("response", response)
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail)
             } else {
                 setEmail("")
                 setPNumber("")
@@ -168,9 +165,7 @@ const Users = () => {
                 setLastName("")
                 setRole("")
                 setIsCreated(true)
-                toast.success('Member added successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                return 'Member added successfully!'
             }
 
 
@@ -182,9 +177,7 @@ const Users = () => {
             setPassword("")
             setLastName("")
             setRole("")
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
 
@@ -204,7 +197,14 @@ const Users = () => {
             password: password,
             role: role
         };
-        createUser(regData);
+
+        toast.promise(createUser(regData), {
+            loading: 'creating user...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
         setOpenCreateModal(false);
     };
 
@@ -223,13 +223,8 @@ const Users = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Staff</h4>

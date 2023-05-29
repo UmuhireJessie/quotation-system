@@ -8,8 +8,7 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Payment = () => {
@@ -33,7 +32,7 @@ const Payment = () => {
 
     const getAllPayment = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/payment/", {
+            const dt = await fetch("https://insurance.e-fashe.com/payment/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -55,7 +54,7 @@ const Payment = () => {
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -151,7 +150,7 @@ const Payment = () => {
     };
     const createMakePayment = async (id: any) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/payment/make/?policyQuoteId=${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/payment/make/?policyQuoteId=${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -162,27 +161,26 @@ const Payment = () => {
             const response = await dt.json();
             console.log("Pay", response)
             if (response?.detail !== "success") {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail);
             } else {
                 setPolicyQuoteId("")
                 setIsCreated(true)
-                toast.success('Payment created successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                return 'Payment created successfully!'
             }
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
     const createNewPayment = (e: any) => {
         e.preventDefault()
-        createMakePayment(policyQuoteId)
-        
+        toast.promise(createMakePayment(policyQuoteId), {
+            loading: 'Loading...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
         setOpenMakeModal(false);
     };
 
@@ -196,7 +194,7 @@ const Payment = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/payment/pay/", {
+            const dt = await fetch("https://insurance.e-fashe.com/payment/pay/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -207,26 +205,20 @@ const Payment = () => {
             const response = await dt.json();
             console.log("Pay", response)
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+               throw new Error(response.detail);
             } else {
                 setIsCreated(true)
                 setMsisdn("")
                 setAmount("")
                 setGtwRef("")
-                toast.success('Payment sent successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                return 'Payment sent successfully!'
             }
         } catch (error: any) {
             console.error(error);
             setMsisdn("")
             setAmount("")
             setGtwRef("")
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
 
@@ -237,7 +229,13 @@ const Payment = () => {
             amount: amount,
             gtwRef: gtwRef
         }
-        createClient(payData);
+        toast.promise(createClient(payData), {
+            loading: 'Loading...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
         setOpenCreateModal(false);
 
     };
@@ -252,13 +250,8 @@ const Payment = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Payment</h4>

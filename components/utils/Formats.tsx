@@ -8,7 +8,7 @@ const token = Cookies.get("token");
 
 const getAllClients = async () => {
     try {
-        const dt = await fetch("http://212.71.245.100:5000/client/", {
+        const dt = await fetch("https://insurance.e-fashe.com/client/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -33,7 +33,7 @@ const getAllClients = async () => {
 
 const getAllQuotes = async () => {
     try {
-        const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+        const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

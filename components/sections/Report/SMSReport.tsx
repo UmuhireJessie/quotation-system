@@ -13,7 +13,7 @@ import { printTable } from "@/components/utils/Print";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { handleExportAndSendEmail } from "@/components/utils/ExportEmail";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const SMSReport = () => {
@@ -44,7 +44,7 @@ const SMSReport = () => {
 
     const getAllSMS = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/sms/", {
+            const dt = await fetch("https://insurance.e-fashe.com/sms/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,7 +63,7 @@ const SMSReport = () => {
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -157,13 +157,8 @@ const SMSReport = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">SMS Report</h4>

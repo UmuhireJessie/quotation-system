@@ -12,7 +12,7 @@ const token = Cookies.get("token");
 
 const getAllClients = async () => {
     try {
-        const dt = await fetch("http://212.71.245.100:5000/client/", {
+        const dt = await fetch("https://insurance.e-fashe.com/client/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const getAllClients = async () => {
 
 const getAllQuotes = async () => {
     try {
-        const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+        const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -166,7 +166,7 @@ export const handleExportAndSendEmail = async (data: any, email: any, type: any)
     };
 
     try {
-        const response = await axios.post('http://212.71.245.100:5000/email/file', formData, config);
+        const response = await axios.post('https://insurance.e-fashe.com/email/file', formData, config);
         if (response.status === 200) {
             toast.success("Report sent successfully.", {
                 className: 'font-[sans-serif] text-sm'

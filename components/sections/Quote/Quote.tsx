@@ -9,8 +9,7 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 const customTheme = (theme: any) => {
     return {
@@ -61,7 +60,7 @@ const Quote = () => {
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -179,7 +178,7 @@ const Quote = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -234,7 +233,7 @@ const Quote = () => {
 
     const getAllClients = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/client/", {
+            const dt = await fetch("https://insurance.e-fashe.com/client/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -281,7 +280,7 @@ const Quote = () => {
 
     const assignClient = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/quatation/asign/${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/quatation/asign/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -293,21 +292,15 @@ const Quote = () => {
             const response = await dt.json();
 
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail);
             } else {
                 setIsCreated(true)
-                toast.success('Client assigned successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                return 'Client assigned successfully!'
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error, {
-                className: 'font-[sans-serif] text-sm'
-            });
+            throw new Error(error.message);
         }
     };
 
@@ -317,7 +310,14 @@ const Quote = () => {
         const assignData = {
             clientId: assignedClient
         };
-        assignClient(assignData, updateQuoteId);
+        
+        toast.promise(assignClient(assignData, updateQuoteId), {
+            loading: 'Assigning client...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
 
         setOpenAssignModel(false);
     };
@@ -340,6 +340,14 @@ const Quote = () => {
             formData.append('file', kycFile);
 
             uploadFile(formData, updateQuoteId);
+
+            toast.promise(uploadFile(formData, updateQuoteId), {
+                loading: 'uploading ...',
+                success: (message) => {
+                    return message;
+                },
+                error: (error) => error.message,
+            })
         }
 
         setKycFile(null)
@@ -348,7 +356,7 @@ const Quote = () => {
     };
     const uploadFile = async (data: any, id: any) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/files/upload?quoteId=${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/files/upload?quoteId=${id}`, {
                 method: "POST",
                 body: data,
                 headers: {
@@ -359,27 +367,29 @@ const Quote = () => {
             const response = await dt.json();
             if (response.status === "success") {
                 setIsCreated(true)
-                toast.success("KYC added successfully!", {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                return "KYC added successfully!"
             } else {
-                toast.error(response?.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                throw new Error(response?.detail)
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
 
     // Download kyc
+    const handleDownload = (id: any) => {
+
+        toast.promise(downloadFile(id), {
+            loading: 'downloading ...',
+            success: 'Successfully downloaded',
+            error: (error) => error.message,
+        })
+    };
     const downloadFile = async (id: any) => {
         try {
-            const response = await fetch(`http://212.71.245.100:5000/files/download?quoteId=${id}`, {
+            const response = await fetch(`https://insurance.e-fashe.com/files/download?quoteId=${id}`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
@@ -399,21 +409,30 @@ const Quote = () => {
                 URL.revokeObjectURL(objectUrl);
             } else {
                 const errorData = await response.json();
-                toast.error(errorData.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                throw new Error(errorData.detail)
             }
         } catch (error: any) {
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
 
     // delete kyc
+    const handleDelete = (id: any) => {
+
+        toast.promise(deleteFile(id), {
+            loading: 'deleting ...',
+            success: (message: any) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
+
+        setOpenUpdateModel(false);
+    };
+
     const deleteFile = async (id: any) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/files/?filename=${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/files/?filename=${id}`, {
                 method: "DELETE",
                 headers: {
                     'Accept': 'application/json',
@@ -422,22 +441,16 @@ const Quote = () => {
             });
             const response = await dt.json();
             console.log("response delete", response)
-            if (response.filename) {
+            if (response?.filename) {
                 setIsCreated(true)
-                toast.success("KYC deleted successfully!", {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                return "KYC deleted successfully!"
             } else {
-                toast.error(response?.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                })
+                throw new Error(response.detail);
             }
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            })
+            throw new Error(error.message)
         }
     };
 
@@ -454,7 +467,7 @@ const Quote = () => {
 
     const updateClient = async (data: any, id) => {
         try {
-            const dt = await fetch(`http://212.71.245.100:5000/quatation/${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/quatation/${id}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -464,11 +477,8 @@ const Quote = () => {
             });
 
             const response = await dt.json();
-            console.log("response", response)
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail);
             } else {
                 setIsCreated(true)
                 setUpdatePolicyQuoteType('')
@@ -477,9 +487,7 @@ const Quote = () => {
                 setUpdateValidDate('')
                 setUpdateAmount('')
                 setUpdateQuoteId('');
-                toast.success('Quotation updated successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                return 'Quotation updated successfully!';
             }
 
         } catch (error: any) {
@@ -490,9 +498,7 @@ const Quote = () => {
             setUpdateValidDate('')
             setUpdateAmount('')
             setUpdateQuoteId('');
-            toast.error(error.message, {
-                className: 'font-[sans-serif] text-sm'
-            });
+            throw new Error(error.message);
         }
     };
 
@@ -507,7 +513,13 @@ const Quote = () => {
             validDate: updateValidDate,
             amount: updateAmount
         };
-        updateClient(updateData, updateQuoteId);
+        toast.promise(updateClient(updateData, updateQuoteId), {
+            loading: 'updating quotation...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
 
         setOpenUpdateModel(false);
     };
@@ -522,13 +534,8 @@ const Quote = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">Quotation</h4>
@@ -735,7 +742,7 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#8ccc42] text-white flex items-center py-[5px] px-[7px] mb-[4px]"}
                                                                 onClick={() => {
-                                                                    downloadFile(row.id)
+                                                                    handleDownload(row.id)
                                                                 }}
                                                             >
                                                                 <span>download</span>
@@ -743,7 +750,7 @@ const Quote = () => {
                                                             <button
                                                                 className={"h-[28px] rounded-[5px] bg-[#cf5e5e] text-white flex items-center py-[5px] px-[7px]"}
                                                                 onClick={() => {
-                                                                    deleteFile(row.id)
+                                                                    handleDelete(row.id)
                                                                 }}
                                                             >
                                                                 <span>delete kyc</span>

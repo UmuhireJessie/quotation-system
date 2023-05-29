@@ -2,9 +2,9 @@ import Adminbar from "@/components/layout/AdminNav";
 import Footer from "@/components/layout/Footer";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 import { Chart } from "chart.js";
+import { useRouter } from "next/router";
 
 
 const Dashboard = () => {
@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [saturday, setSaturday] = useState(0)
   const [sunday, setSunday] = useState(0)
   const token = Cookies.get("token");
+  const router = useRouter()
 
   const getRevenueChart = async () => {
     const canvas = document.getElementById('myChart') as HTMLCanvasElement | null;
@@ -51,7 +52,7 @@ const Dashboard = () => {
 
   const getAllPayment = async () => {
     try {
-      const dt = await fetch("http://212.71.245.100:5000/payment/", {
+      const dt = await fetch("https://insurance.e-fashe.com/payment/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +73,6 @@ const Dashboard = () => {
       const currentYear = currentDate.getFullYear();
       const currentMonth = currentDate.getMonth();
       const currentDay = currentDate.getDate();
-      console.log("data icagaguye", currentDate, "year:", currentYear, "month:", currentMonth, "date:", currentDay, "day:", currentDate.getDay())
       const firstDayOfWeek = new Date(currentYear, currentMonth, currentDay - currentDate.getDay());
       const lastDayOfWeek = new Date(currentYear, currentMonth, currentDay + (6 - currentDate.getDay()));
 
@@ -118,7 +118,6 @@ const Dashboard = () => {
             break;
         }
       });
-      console.log("mondayAmount", mondayAmount)
 
       const successfulArray = dataArray.filter(data => data.status === "successful");
       const totalAmount = successfulArray.reduce((sum, data) => sum + data.amount, 0);
@@ -151,11 +150,15 @@ const Dashboard = () => {
   useEffect(() => {
     getAllPayment()
     getRevenueChart()
-  }, [monday, tuesday, wednesday, thursday, friday, saturday, sunday])
+    const toastMessage = router.query.toast;
+    toastMessage ? Array.isArray(toastMessage) ? toast.error(toastMessage.join(" ")) : toast.error(toastMessage) : null;
+  }, [monday, tuesday, wednesday, thursday, friday, saturday, sunday, router.query])
 
   return (
     <>
       <Adminbar />
+      <Toaster
+        position="top-right" />
       <div className="mt-[5rem] ml-[17rem] mr-5 mb-4 p-6">
         <div className="flex justify-center mb-9">
           <div className="bg-purple-600 text-white w-[30%] rounded-lg p-6 mr-9">
@@ -195,7 +198,7 @@ const Dashboard = () => {
         </div>
         <div className="flex justify-center">
           <div className="bg-white w-[64%] rounded-lg p-6 mr-9 border shadow-md text-sm">
-            <h4 className="pb-3">Chart showing amount generated from quote paid this</h4>
+            <h4 className="font-medium pb-3 ">Chart showing amount generated from quote paid this week</h4>
             <div>
               <canvas id='myChart'></canvas>
             </div>

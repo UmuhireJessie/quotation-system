@@ -2,11 +2,10 @@ import Navbar from "@/components/layout/Navbar";
 import Image from "next/image";
 import logo from "../../assets/images/biglogo.png"
 import styles from './login.module.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from "next/router";
 
 const Login = () => {
 
@@ -23,7 +22,7 @@ const Login = () => {
 
   const loginUser = async (data: any) => {
     try {
-      const dt = await fetch("http://212.71.245.100:5000/auth/login", {
+      const dt = await fetch("https://insurance.e-fashe.com/auth/login", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -66,16 +65,18 @@ const Login = () => {
     loginUser(loginData)
   };
 
+  const router = useRouter();
+
+  useEffect(() => {
+    const toastMessage = router.query.toast;
+    toastMessage ? Array.isArray(toastMessage) ? toast.error(toastMessage.join(" ")) : toast.error(toastMessage) : null;
+  }, [router.query]);
+
   return (
     <div>
       <Navbar />
-      <ToastContainer
-        autoClose={2000}
-        hideProgressBar={true}
-        closeOnClick
-        pauseOnHover
-        style={{ width: "300px", height: "100px" }}
-      />
+      <Toaster
+        position="top-right" />
 
       <div className={styles.loginCard}>
         <div className={styles.loginCardLeft}>

@@ -8,8 +8,7 @@ import Modal from "@mui/material/Modal";
 import * as IoIcons from "react-icons/io5";
 import * as BsIcons from "react-icons/bs";
 import { Pagination } from '@nextui-org/react';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const SMS = () => {
@@ -30,7 +29,7 @@ const SMS = () => {
 
     const getAllSMS = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/sms/", {
+            const dt = await fetch("https://insurance.e-fashe.com/sms/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -119,7 +118,7 @@ const SMS = () => {
     };
     const createClient = async (data: any) => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/sms/send/", {
+            const dt = await fetch("https://insurance.e-fashe.com/sms/send/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
@@ -128,20 +127,15 @@ const SMS = () => {
             });
 
             const response = await dt.json();
-            console.log("send sms", response)
             if (response?.detail) {
-                toast.error(response.detail, {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                throw new Error(response.detail);
             } else {
                 setMsisdn("")
                 setMessage("")
                 setMsgRef("")
                 setSenderId("")
                 setIsCreated(true)
-                toast.success('SMS sent successfully!', {
-                    className: 'font-[sans-serif] text-sm'
-                });
+                return 'SMS sent successfully!';
             }
         } catch (error: any) {
             console.error(error);
@@ -149,9 +143,7 @@ const SMS = () => {
             setMessage("")
             setMsgRef("")
             setSenderId("")
-            toast.error(error, {
-                className: 'font-[sans-serif] text-sm'
-            });
+            throw new Error(error.message);
         }
     };
 
@@ -163,13 +155,19 @@ const SMS = () => {
             msgRef: msgRef,
             sender_id: senderId
         }
-        createClient(regData);
+        toast.promise(createClient(regData), {
+            loading: 'Loading...',
+            success: (message) => {
+                return message;
+            },
+            error: (error) => error.message,
+        })
         setOpenCreateModal(false);
     };
 
     const getAllQuotes = async () => {
         try {
-            const dt = await fetch("http://212.71.245.100:5000/quatation/", {
+            const dt = await fetch("https://insurance.e-fashe.com/quatation/", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -205,13 +203,8 @@ const SMS = () => {
     return (
         <>
             <Adminbar />
-            <ToastContainer
-                autoClose={2000}
-                hideProgressBar={true}
-                closeOnClick
-                pauseOnHover
-                style={{ width: "300px", height: "100px" }}
-            />
+            <Toaster
+                position="top-right" />
             <div className="mt-[7rem] ml-[18rem] mr-7 mb-4 bg-white p-6 rounded-md">
                 <div>
                     <h4 className="font-[500] text-[16px] mb-6">SMS</h4>

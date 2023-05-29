@@ -15,8 +15,7 @@ export function middleware(req: NextRequest) {
     
 
     if (token === undefined) {
-        toast.info("Please sign in first.")
-        return NextResponse.redirect(`${pathUrl.origin}/`)
+        return NextResponse.redirect(`${pathUrl.origin}/?toast=Please sign in first.`)
     } else {
         try {
             // decode the JWT token
@@ -25,19 +24,17 @@ export function middleware(req: NextRequest) {
             // check if the JWT is expired
             const currentTime = Date.now() / 1000;
             if (decodedToken.expires < currentTime) {
-                toast.info("You've been signed out! Sign in again")
                 req.cookies.delete('token');
-                return NextResponse.redirect(`${pathUrl.origin}/`)
+                return NextResponse.redirect(`${pathUrl.origin}/?toast=You've been signed out! Sign in again`)
             }
             if(decodedToken.role !== 'admin' && pathUrl.href === `${pathUrl.origin}/users`) {
-                return NextResponse.redirect(`${pathUrl.origin}/dashboard`)
+                return NextResponse.redirect(`${pathUrl.origin}/dashboard?toast=You're not authorized to access staff page.`)
             }
             
             return NextResponse.next()
             
         } catch (error) {
-            toast.info("Please sign in first.")
-            return NextResponse.redirect(`${pathUrl.origin}/`)
+            return NextResponse.redirect(`${pathUrl.origin}/?toast=Please sign in first.`)
         }
     }
 }
