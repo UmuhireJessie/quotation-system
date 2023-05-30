@@ -12,7 +12,7 @@ export function middleware(req: NextRequest) {
     const token = req.cookies.get('token')?.value;
     const pathUrl = req.nextUrl
     const url = req
-    
+
 
     if (token === undefined) {
         return NextResponse.redirect(`${pathUrl.origin}/?toast=Please sign in first.`)
@@ -27,12 +27,15 @@ export function middleware(req: NextRequest) {
                 req.cookies.delete('token');
                 return NextResponse.redirect(`${pathUrl.origin}/?toast=You've been signed out! Sign in again`)
             }
-            if(decodedToken.role !== 'admin' && pathUrl.href === `${pathUrl.origin}/users`) {
+            if (pathUrl.href === `${pathUrl.origin}/`) {
+                return NextResponse.redirect(`${pathUrl.origin}/dashboard`);
+            }
+            if (decodedToken.role !== 'admin' && pathUrl.href === `${pathUrl.origin}/users`) {
                 return NextResponse.redirect(`${pathUrl.origin}/dashboard?toast=You're not authorized to access staff page.`)
             }
-            
+
             return NextResponse.next()
-            
+
         } catch (error) {
             return NextResponse.redirect(`${pathUrl.origin}/?toast=Please sign in first.`)
         }
