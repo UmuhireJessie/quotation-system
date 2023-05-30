@@ -339,8 +339,6 @@ const Quote = () => {
             const formData = new FormData();
             formData.append('file', kycFile);
 
-            uploadFile(formData, updateQuoteId);
-
             toast.promise(uploadFile(formData, updateQuoteId), {
                 loading: 'uploading ...',
                 success: (message) => {
