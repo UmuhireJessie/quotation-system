@@ -887,6 +887,7 @@ const Quote = () => {
                                     required
                                     name="amount"
                                     placeholder="Amount"
+                                    min={100}
                                     value={amount}
                                     onChange={(e) => {
                                         setAmount(e.target.value);

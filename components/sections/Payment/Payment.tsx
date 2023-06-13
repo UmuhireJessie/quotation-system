@@ -23,6 +23,7 @@ const Payment = () => {
 
     const [openMakeModal, setOpenMakeModal] = useState(false);
     const [policyQuoteId, setPolicyQuoteId] = useState("")
+    const [pNumber, setPNumber] = useState("")
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [isCreated, setIsCreated] = useState(false)
     const [quoteInfo, setQuoteInfo] = useState({});
@@ -148,9 +149,9 @@ const Payment = () => {
     const handleCloseMakeModel = () => {
         setOpenMakeModal(false);
     };
-    const createMakePayment = async (id: any) => {
+    const createMakePayment = async (id: any, nbr:any) => {
         try {
-            const dt = await fetch(`https://insurance.e-fashe.com/payment/make/?policyQuoteId=${id}`, {
+            const dt = await fetch(`https://insurance.e-fashe.com/payment/make/?policyQuoteId=${id}&phoneNo=${nbr}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -174,7 +175,7 @@ const Payment = () => {
     };
     const createNewPayment = (e: any) => {
         e.preventDefault()
-        toast.promise(createMakePayment(policyQuoteId), {
+        toast.promise(createMakePayment(policyQuoteId, pNumber), {
             loading: 'Loading...',
             success: (message) => {
                 return message;
@@ -508,6 +509,19 @@ const Payment = () => {
                                     value={policyQuoteId}
                                     onChange={(e) => {
                                         setPolicyQuoteId(e.target.value);
+                                    }}
+                                    className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="number"
+                                    required
+                                    name="pNnumber"
+                                    placeholder="Phone Number"
+                                    value={pNumber}
+                                    onChange={(e) => {
+                                        setPNumber(e.target.value);
                                     }}
                                     className="bg-lime text-sm self-center rounded-[5px] h-[40px] my-[15px] mx-auto block border-[1px] border-[#a8a8a8]  px-[10px] w-[85%] focus:outline-none focus:shadow-md"
                                 />
